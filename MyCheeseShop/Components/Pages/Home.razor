@@ -1,5 +1,4 @@
 ﻿@page "/"
-@rendermode InteractiveServer
 @inject CheeseProvider CheeseProvider
 @inject NavigationManager NavigationManager
 @inject ShoppingCart ShoppingCart
@@ -12,7 +11,7 @@
             <h3>Our wonderful cheese</h3>
         </div>
         <div>
-            <a @onclick="GoToBasket" class="btn btn-outline-primary">🛒 Basket (@ShoppingCart.Count())</a>
+            <a @onclick="GoToCart" class="btn btn-outline-primary">🛒 Cart (@ShoppingCart.Count())</a>
         </div>
     </div>
     <div class="row row-cols-1 row-cols-md-4 g-4">
@@ -40,9 +39,9 @@
         ShoppingCart.OnCartUpdated += CartUpdated;
     }
 
-    private void GoToBasket()
+    private void GoToCart()
     {
-        NavigationManager.NavigateTo("/basket");
+        NavigationManager.NavigateTo("/cart");
     }
 
 }

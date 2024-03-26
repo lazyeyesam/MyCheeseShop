@@ -1,17 +1,16 @@
-﻿@rendermode InteractiveServer
-@inject ShoppingCart ShoppingCart
+﻿@inject ShoppingCart ShoppingCart
 
 <div class="card h-100">
     <img src="/img/no_cheese.png" class="card-img-top" alt="@Cheese.Name">
     <div class="card-body">
+        <h5>
+            <span class="badge bg-primary">@Cheese.Type</span>&nbsp;
+            <span class="badge bg-success">@Cheese.Strength</span>
+        </h5>
         <div class="d-flex justify-content-between">
             <h5 class="card-title">@Cheese.Name</h5>
             <h5><span class="badge bg-danger">@Cheese.Price.ToString("C")</span></h5>
         </div>
-        <p class="card-text">
-            <span class="badge bg-primary">@Cheese.Type</span>&nbsp;
-            <span class="badge bg-success">@Cheese.Strength</span>
-        </p>
         <p class="card-text">@Cheese.Description</p>
         <EditForm Model="quantity" OnSubmit="AddToCart">
             <div class="row">
