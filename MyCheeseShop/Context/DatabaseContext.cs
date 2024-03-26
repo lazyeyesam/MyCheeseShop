@@ -15,7 +15,7 @@ namespace MyCheeseShop.Context
         {
             var folder = Environment.SpecialFolder.MyDocuments;
             var path = Environment.GetFolderPath(folder);
-            var dbPath = Path.Join(path, "cheesedb.db");
+            var dbPath = Path.Join(path, "cheese.db");
             optionbuilder.UseSqlite($"Data Source={dbPath}");
         }
     }

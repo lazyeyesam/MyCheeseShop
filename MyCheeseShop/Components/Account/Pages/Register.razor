@@ -58,12 +58,22 @@
 
     public async Task RegisterUser(EditContext editContext)
     {
-        var user = Activator.CreateInstance<User>(); ;
-        await UserStore.SetUserNameAsync(user, Model.Email, CancellationToken.None);
-        var emailStore = (IUserEmailStore<User>)UserStore;
-        await emailStore.SetEmailAsync(user, Model.Email, CancellationToken.None);
+        // create the user
+        var user = new User
+        {
+            UserName = Model.Email,
+            Email = Model.Email,
+            FirstName = Model.FirstName,
+            LastName = Model.LastName,
+            Address = Model.Address,
+            City = Model.City,
+            PostCode = Model.PostCode
+        };
+
+        // add to the database
         var result = await UserManager.CreateAsync(user, Model.Password);
 
+        // report the errors
         if (!result.Succeeded)
         {
             identityErrors = result.Errors;
@@ -71,10 +81,11 @@
             return;
         }
 
-        Logger.LogInformation("User created a new account with password.");
+        // assign the role
+        await UserManager.AddToRoleAsync(user, "Customer");
 
+        // log the user in
         var userId = await UserManager.GetUserIdAsync(user);
-
         await SignInManager.SignInAsync(user, isPersistent: false);
         RedirectManager.RedirectTo(ReturnUrl);
     }
@@ -82,9 +93,12 @@
     private sealed class InputModel
     {
         public string Email { get; set; } = "";
-
         public string Password { get; set; } = "";
-
         public string ConfirmPassword { get; set; } = "";
+        public string FirstName { get; set; } = "";
+        public string LastName { get; set; } = "";
+        public string Address { get; set; } = "";     
+        public string City { get; set; } = "";
+        public string PostCode { get; set; } = "";
     }
 }

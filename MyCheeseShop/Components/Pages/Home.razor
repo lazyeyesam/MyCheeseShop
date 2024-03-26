@@ -1,8 +1,48 @@
 ﻿@page "/"
+@rendermode InteractiveServer
+@inject CheeseProvider CheeseProvider
+@inject NavigationManager NavigationManager
+@inject ShoppingCart ShoppingCart
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<div class="container mt-2">
+    <div class="d-flex justify-content-between">
+        <div>
+            <h3>Our wonderful cheese</h3>
+        </div>
+        <div>
+            <a @onclick="GoToBasket" class="btn btn-outline-primary">🛒 Basket (@ShoppingCart.Count())</a>
+        </div>
+    </div>
+    <div class="row row-cols-1 row-cols-md-4 g-4">
 
-<p>Don't forget to 'add-migration xxx' and 'update-database'!</p>
+        @foreach (var cheese in cheeses)
+        {
+            <div class="col">
+                <StoreItem Cheese="cheese" />
+            </div>
+        }
+    </div>
+</div>
 
+@code {
+    private IEnumerable<Cheese> cheeses;
+
+    public void CartUpdated()
+    {
+        StateHasChanged();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        cheeses = await CheeseProvider.GetAllCheesesAsync();
+        ShoppingCart.OnCartUpdated += CartUpdated;
+    }
+
+    private void GoToBasket()
+    {
+        NavigationManager.NavigateTo("/basket");
+    }
+
+}
