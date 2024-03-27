@@ -17,79 +17,86 @@
     </div>
 </div>
 
-<div class="row mb-2">
-    <div class="col-6">
-        <div class="card h-100">
-            <div class="card-body bg-light">
-                <h4 class="card-title">Customer</h4>
-                <div class="form-group mb-1">
-                    <label class="form-label">Name</label>
-                    <input class="form-control" value="@GetFormattedName(user)" disabled />
+<EditForm EditContext="editContext" OnValidSubmit="MakePayment">
+    <DataAnnotationsValidator />
+    <div class="row mb-2">
+        <div class="col-6">
+            <div class="card h-100">
+                <div class="card-body bg-light">
+                    <h4 class="card-title">Customer</h4>
+                    <div class="form-group mb-1">
+                        <label class="form-label">Name</label>
+                        <input class="form-control" value="@GetFormattedName(user)" disabled />
+                    </div>
+                    <div class="form-group mb-1">
+                        <label class="form-label">Address</label>
+                        <textarea class="form-control" rows="3" style="resize: none" value="@GetFormattedAddress(user)" disabled />
+                    </div>
+                    <div class="form-group mb-1">
+                        <label class="form-label">Email</label>
+                        <input class="form-control" value="@user.Email" disabled />
+                    </div>
                 </div>
-                <div class="form-group mb-1">
-                    <label class="form-label">Address</label>
-                    <textarea class="form-control" rows="3" style="resize: none" value="@GetFormattedAddress(user)" disabled />
-                </div>
-                <div class="form-group mb-1">
-                    <label class="form-label">Email</label>
-                    <input class="form-control" value="@user.Email" disabled />
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="card h-100">
+                <div class="card-body bg-light">
+                    <h4 class="card-title">Payment</h4>
+                    <div class="form-group mb-1">
+                        <label class="form-label">Name on card</label>
+                        <InputText class="form-control" placeholder="@GetFormattedName(user)" @bind-Value="paymentDetails.NameOnCard" />
+                    </div>
+                    <div class="form-group mb-1">
+                        <label class="form-label">Card number</label>
+                        <InputText class="form-control" placeholder="0000-0000-0000-0000" @bind-Value="paymentDetails.CardNumber" />
+                    </div>
+                    <div class="form-group mb-1">
+                        <label class="form-label">Expiry Date</label>
+                        <InputText class="form-control" placeholder="12/23" @bind-Value="paymentDetails.ExpiryDate"  />
+                    </div>
+                    <div class="form-group mb-1">
+                        <label class="form-label">Security Code</label>
+                        <InputText class="form-control" placeholder="123" @bind-Value="paymentDetails.SecurityCode" />
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-6">
-        <div class="card h-100">
-            <div class="card-body bg-light">
-                <h4 class="card-title">Payment</h4>
-                <div class="form-group mb-1">
-                    <label class="form-label">Name on card</label>
-                    <input class="form-control" />
-                </div>
-                <div class="form-group mb-1">
-                    <label class="form-label">Card number</label>
-                    <input class="form-control" />
-                </div>
-                <div class="form-group mb-1">
-                    <label class="form-label">Expiry Date</label>
-                    <input class="form-control" />
-                </div>
-                <div class="form-group mb-1">
-                    <label class="form-label">Security Code</label>
-                    <input class="form-control" />
-                </div>
-            </div>
+
+    <div class="d-flex justify-content-between">
+        <div>
+            <button @onclick="GoToCart" class="btn btn-outline-primary">🛒 Back to Cart</button>
+        </div>
+        <div>
+            <button type="submit" class="btn btn-outline-danger">
+                @if (isPaying)
+                {
+                    <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                }
+                else
+                {
+                    <span>💳</span>
+                }
+                <span> Pay Now</span>
+            </button>
         </div>
     </div>
-</div>
 
-<div class="d-flex justify-content-between">
-    <div>
-        <button @onclick="GoToCart" class="btn btn-outline-primary">🛒 Back to Cart</button>
-    </div>
-    <div>
-        <button @onclick="MakePayment" class="btn btn-outline-danger">
-            @if (isPaying)
-            {
-                <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-            }
-            else
-            {
-                <span>💳</span>
-            }
-
-            <span> Pay Now</span>
-        </button>
-    </div>
-</div>
+</EditForm>
 
 @code {
 
     private User user;
-    private PaymentDetails paymentDetails = new();
+    private PaymentDetails paymentDetails;
+    private EditContext editContext;
     private bool isPaying;
 
     protected override async Task OnInitializedAsync()
     {
+        paymentDetails = new PaymentDetails();
+        editContext = new EditContext(paymentDetails);
+
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var username = authState!.User!.Identity!.Name!;
         user = UserProvider.GetUser(username)!;
@@ -132,9 +139,16 @@
 
     private sealed class PaymentDetails
     {
+        [Required]
         public string NameOnCard { get; set; }
+
+        [Required]
         public string CardNumber { get; set; }
+
+        [Required]
         public string ExpiryDate { get; set; }
+
+        [Required]
         public string SecurityCode { get; set; }
     }
 }

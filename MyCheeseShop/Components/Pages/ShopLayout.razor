@@ -17,8 +17,14 @@
             var items = result.Success ? result.Value : null;
             if (items is not null && items.Any())
             {
-                var cheeses = items.Select(item => item.Cheese);
-                DatabaseContext.Cheeses.AttachRange(cheeses);
+                items.ForEach(item =>
+                {
+                    var existing = DatabaseContext.Cheeses.Local.FirstOrDefault(cheese => cheese.Id == item.Cheese.Id);
+                    if (existing == null)
+                    {
+                        DatabaseContext.Cheeses.Attach(item.Cheese);
+                    }
+                });
                 ShoppingCart.SetItems(items);
             }
             
