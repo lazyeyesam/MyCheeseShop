@@ -34,6 +34,11 @@
 </div>
 
 @code {
+    protected override void OnAfterRender(bool firstRender)
+    {
+        StateHasChanged();
+    }
+
     private void GoToStore()
     {
         NavigationManager.NavigateTo("/");

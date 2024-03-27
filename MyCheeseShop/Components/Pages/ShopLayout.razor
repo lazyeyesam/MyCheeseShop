@@ -1,6 +1,7 @@
 ﻿@inherits LayoutComponentBase
 @layout MyCheeseShop.Components.Layout.MainLayout
 
+@inject DatabaseContext DatabaseContext
 @inject ShoppingCart ShoppingCart
 @inject ProtectedSessionStorage ProtectedSessionStore
 
@@ -10,11 +11,17 @@
 
     protected async override Task OnAfterRenderAsync(bool firstRender)
     {
-        if (!firstRender) return;
-
-        var result = await ProtectedSessionStore.GetAsync<List<CartItem>>("cart");
-        var items = result.Success ? result.Value : null;
-        if (items is not null && items.Any())
-            ShoppingCart.SetItems(items);
+        if (firstRender)
+        {
+            var result = await ProtectedSessionStore.GetAsync<List<CartItem>>("cart");
+            var items = result.Success ? result.Value : null;
+            if (items is not null && items.Any())
+            {
+                var cheeses = items.Select(item => item.Cheese);
+                DatabaseContext.Cheeses.AttachRange(cheeses);
+                ShoppingCart.SetItems(items);
+            }
+            
+        }
     }
 }

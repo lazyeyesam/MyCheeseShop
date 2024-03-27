@@ -5,6 +5,7 @@
 @inject ShoppingCart ShoppingCart
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager
+@inject ProtectedSessionStorage ProtectedSessionStore
 
 <PageTitle>Checkout</PageTitle>
 
@@ -63,10 +64,21 @@
 
 <div class="d-flex justify-content-between">
     <div>
-        <a @onclick="GoToCart" class="btn btn-outline-primary">🛒 Back to Cart</a>
+        <button @onclick="GoToCart" class="btn btn-outline-primary">🛒 Back to Cart</button>
     </div>
     <div>
-        <a @onclick="MakePayment" class="btn btn-outline-danger">💵 Pay Now</a>
+        <button @onclick="MakePayment" class="btn btn-outline-danger">
+            @if (isPaying)
+            {
+                <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+            }
+            else
+            {
+                <span>💳</span>
+            }
+
+            <span> Pay Now</span>
+        </button>
     </div>
 </div>
 
@@ -74,6 +86,7 @@
 
     private User user;
     private PaymentDetails paymentDetails = new();
+    private bool isPaying;
 
     protected override async Task OnInitializedAsync()
     {
@@ -84,10 +97,22 @@
 
     private async Task MakePayment()
     {
-        //await Task.Delay(2000);
+        await SimulatePayment();
+
         await OrderProvider.CreateOrder(user, ShoppingCart.GetItems());
         ShoppingCart.Clear();
         NavigationManager.NavigateTo("/");
+    }
+
+    private async Task SimulatePayment()
+    {
+        isPaying = true;
+        StateHasChanged();
+
+        await Task.Delay(2000);
+
+        isPaying = false;
+        StateHasChanged();
     }
 
     private void GoToCart()
