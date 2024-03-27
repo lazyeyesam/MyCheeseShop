@@ -54,6 +54,11 @@ else
 }
 
 @code {
+    protected override void OnInitialized()
+    {
+        ShoppingCart.OnCartUpdated += StateHasChanged;
+    }
+
     private void GoToStore()
     {
         NavigationManager.NavigateTo("/");

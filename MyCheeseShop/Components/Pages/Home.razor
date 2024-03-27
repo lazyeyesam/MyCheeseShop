@@ -2,6 +2,7 @@
 @inject CheeseProvider CheeseProvider
 @inject NavigationManager NavigationManager
 @inject ShoppingCart ShoppingCart
+@inject ProtectedSessionStorage ProtectedSessionStore
 
 <PageTitle>Home</PageTitle>
 
@@ -28,20 +29,14 @@
 @code {
     private IEnumerable<Cheese> cheeses;
 
-    public void CartUpdated()
-    {
-        StateHasChanged();
-    }
-
     protected override async Task OnInitializedAsync()
     {
         cheeses = await CheeseProvider.GetAllCheesesAsync();
-        ShoppingCart.OnCartUpdated += CartUpdated;
+        ShoppingCart.OnCartUpdated += StateHasChanged;
     }
 
     private void GoToCart()
     {
         NavigationManager.NavigateTo("/cart");
     }
-
 }

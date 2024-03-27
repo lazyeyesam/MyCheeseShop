@@ -1,4 +1,5 @@
-﻿@inject ShoppingCart ShoppingCart
+﻿@inject ProtectedSessionStorage ProtectedSessionStore
+@inject ShoppingCart ShoppingCart
 
 <div class="card h-100">
     <img src="/img/no_cheese.png" class="card-img-top" alt="@Cheese.Name">
@@ -45,8 +46,9 @@
     public Cheese Cheese { get; set; }
     private int quantity = 1;
 
-    public void AddToCart()
+    public async Task AddToCart()
     {
         ShoppingCart.AddItem(Cheese, quantity);
+        await ProtectedSessionStore.SetAsync("cart", ShoppingCart.GetItems());
     }
 }
