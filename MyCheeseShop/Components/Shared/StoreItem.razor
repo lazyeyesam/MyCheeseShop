@@ -23,7 +23,16 @@
                     </InputSelect>
                 </div>
                 <div class="col">
-                    <button class="btn btn-primary w-100">Add to cart</button>
+                    <button class="btn btn-primary position-relative w-100">
+                        Add to cart
+                        @if (ShoppingCart.GetQuantity(Cheese) > 0)
+                        {
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                @ShoppingCart.GetQuantity(Cheese)
+                                <span class="visually-hidden">@Cheese.Name in shopping cart</span>
+                            </span>
+                        }
+                    </button>
                 </div>
             </div>
         </EditForm>

@@ -1,38 +1,66 @@
 ﻿@page "/cart"
 @inject ShoppingCart ShoppingCart
-
-<h3>Cart</h3>
+@inject NavigationManager NavigationManager
 
 @if (ShoppingCart.Count() == 0)
 {
-    <p>Your cart is empty</p>
+    <h3>Shopping Cart</h3>
+    <p>🛒 Your cart is empty</p>
+    <div>
+        <button @onclick="GoToStore" class="btn btn-outline-primary">🧀 Back to cheeses</button>
+    </div>
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Total</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in ShoppingCart.GetItems())
-            {
+    <div class="d-flex justify-content-between">
+        <div>
+            <h3>Shopping Cart</h3>
+        </div>
+        <div>
+            <a @onclick="GoToCheckout" class="btn btn-outline-primary">💵 Checkout</a>
+        </div>
+    </div>
+    <div>
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>@item.Cheese.Name</td>
-                    <td>@item.Cheese.Price.ToString("C")</td>
-                    <td>@(item.Quantity*100)g</td>
-                    <td>@((item.Cheese.Price * item.Quantity).ToString("C"))</td>
+                    <th scope="col">Name</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Total</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var item in ShoppingCart.GetItems())
+                {
+                    <tr>
+                        <td scope="col">@item.Cheese.Name</td>
+                        <td scope="col">@item.Cheese.Price.ToString("C")</td>
+                        <td scope="col">@(item.Quantity * 100)g</td>
+                        <td scope="col">@((item.Cheese.Price * item.Quantity).ToString("C"))</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="d-flex justify-content-between">
+        <div>
+            <button @onclick="GoToStore" class="btn btn-outline-primary">🧀 Back to cheeses</button>
+        </div>
+        <div>
+            <h4>Total: @(ShoppingCart.Total().ToString("C"))</h4>
+        </div>
+    </div>
 }
 
-
 @code {
+    private void GoToStore()
+    {
+        NavigationManager.NavigateTo("/");
+    }
 
+    private void GoToCheckout()
+    {
+        NavigationManager.NavigateTo("/checkout");
+    }
 }
