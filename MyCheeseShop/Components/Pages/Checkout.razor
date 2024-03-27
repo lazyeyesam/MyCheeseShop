@@ -1,0 +1,115 @@
+﻿@page "/checkout"
+@attribute [Authorize]
+@inject UserProvider UserProvider
+@inject OrderProvider OrderProvider
+@inject ShoppingCart ShoppingCart
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager
+
+<PageTitle>Checkout</PageTitle>
+
+<h3>Checkout</h3>
+<div class="card mb-2">
+    <div class="card-body bg-light">
+        <h4 class="card-title">Order Summary</h4>
+        <CartSummary />
+    </div>
+</div>
+
+<div class="row mb-2">
+    <div class="col-6">
+        <div class="card h-100">
+            <div class="card-body bg-light">
+                <h4 class="card-title">Customer</h4>
+                <div class="form-group mb-1">
+                    <label class="form-label">Name</label>
+                    <input class="form-control" value="@GetFormattedName(user)" disabled />
+                </div>
+                <div class="form-group mb-1">
+                    <label class="form-label">Address</label>
+                    <textarea class="form-control" rows="3" style="resize: none" value="@GetFormattedAddress(user)" disabled />
+                </div>
+                <div class="form-group mb-1">
+                    <label class="form-label">Email</label>
+                    <input class="form-control" value="@user.Email" disabled />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="card h-100">
+            <div class="card-body bg-light">
+                <h4 class="card-title">Payment</h4>
+                <div class="form-group mb-1">
+                    <label class="form-label">Name on card</label>
+                    <input class="form-control" />
+                </div>
+                <div class="form-group mb-1">
+                    <label class="form-label">Card number</label>
+                    <input class="form-control" />
+                </div>
+                <div class="form-group mb-1">
+                    <label class="form-label">Expiry Date</label>
+                    <input class="form-control" />
+                </div>
+                <div class="form-group mb-1">
+                    <label class="form-label">Security Code</label>
+                    <input class="form-control" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="d-flex justify-content-between">
+    <div>
+        <a @onclick="GoToCart" class="btn btn-outline-primary">🛒 Back to Cart</a>
+    </div>
+    <div>
+        <a @onclick="MakePayment" class="btn btn-outline-danger">💵 Pay Now</a>
+    </div>
+</div>
+
+@code {
+
+    private User user;
+    private PaymentDetails paymentDetails = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var username = authState!.User!.Identity!.Name!;
+        user = UserProvider.GetUser(username)!;
+    }
+
+    private async Task MakePayment()
+    {
+        //await Task.Delay(2000);
+        await OrderProvider.CreateOrder(user, ShoppingCart.GetItems());
+        ShoppingCart.Clear();
+        NavigationManager.NavigateTo("/");
+    }
+
+    private void GoToCart()
+    {
+        NavigationManager.NavigateTo("/cart");
+    }
+
+    private string GetFormattedName(User user)
+    {
+        return $"{user.FirstName} {user.LastName}";
+    }
+
+    private string GetFormattedAddress(User user)
+    {
+        return $"{user.Address}{Environment.NewLine}{user.City}{Environment.NewLine}{user.PostCode}";
+    }
+
+    private sealed class PaymentDetails
+    {
+        public string NameOnCard { get; set; }
+        public string CardNumber { get; set; }
+        public string ExpiryDate { get; set; }
+        public string SecurityCode { get; set; }
+    }
+}

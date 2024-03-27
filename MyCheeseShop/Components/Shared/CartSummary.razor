@@ -1,0 +1,41 @@
+﻿@inject ShoppingCart ShoppingCart
+@inject NavigationManager NavigationManager
+
+<div>
+    <table class="table" style="background-color: white;">
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Price</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in ShoppingCart.GetItems())
+            {
+                <tr>
+                    <td scope="col">@item.Cheese.Name</td>
+                    <td scope="col">@item.Cheese.Price.ToString("C")</td>
+                    <td scope="col">@(item.Quantity * 100)g</td>
+                    <td scope="col">@((item.Cheese.Price * item.Quantity).ToString("C"))</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div class="d-flex justify-content-between">
+    <div>
+        <button @onclick="GoToStore" class="btn btn-outline-primary">🧀 Back to cheeses</button>
+    </div>
+    <div>
+        <h4>Total: @(ShoppingCart.Total().ToString("C"))</h4>
+    </div>
+</div>
+
+@code {
+    private void GoToStore()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+}
