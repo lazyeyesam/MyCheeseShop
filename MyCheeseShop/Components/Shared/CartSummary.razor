@@ -1,5 +1,6 @@
 ﻿@inject ShoppingCart ShoppingCart
 @inject NavigationManager NavigationManager
+@inject ProtectedSessionStorage ProtectedSessionStore
 
 <div>
     <table class="table" style="background-color: white;">
@@ -9,6 +10,10 @@
                 <th scope="col">Price</th>
                 <th scope="col">Quantity</th>
                 <th scope="col">Total</th>
+                @if (IsEditable)
+                {
+                    <th scope="col">Actions</th>
+                }
             </tr>
         </thead>
         <tbody>
@@ -19,6 +24,14 @@
                     <td scope="col">@item.Cheese.Price.ToString("C")</td>
                     <td scope="col">@(item.Quantity * 100)g</td>
                     <td scope="col">@((item.Cheese.Price * item.Quantity).ToString("C"))</td>
+                    @if (IsEditable)
+                    {
+                        <td scope="col">
+                            <button class="btn btn-outline-success" @onclick="() => IncreaseQuantity(item)">➕</button>
+                            <button class="btn btn-outline-primary" @onclick="() => DecreaseQuantity(item)">➖</button>
+                            <button class="btn btn-outline-danger" @onclick="() => RemoveItem(item)">🗑</button>
+                        </td>
+                    }
                 </tr>
             }
         </tbody>
@@ -34,6 +47,35 @@
 </div>
 
 @code {
+    [Parameter]
+    public bool IsEditable { get; set; } = false;
+
+    protected override void OnInitialized()
+    {
+        ShoppingCart.OnCartUpdated += async () => await CartUpdated();
+    }
+
+    private async Task CartUpdated()
+    {
+        StateHasChanged();
+        await ProtectedSessionStore.SetAsync("cart", ShoppingCart.GetItems());
+    }
+
+    private void RemoveItem(CartItem item)
+    {
+        ShoppingCart.RemoveItem(item.Cheese);
+    }
+
+    private void IncreaseQuantity(CartItem item)
+    {
+        ShoppingCart.AddItem(item.Cheese, 1);
+    }
+
+    private void DecreaseQuantity(CartItem item)
+    {
+        ShoppingCart.RemoveItem(item.Cheese, 1);
+    }
+
     protected override void OnAfterRender(bool firstRender)
     {
         StateHasChanged();

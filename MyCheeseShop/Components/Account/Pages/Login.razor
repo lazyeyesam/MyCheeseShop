@@ -17,6 +17,7 @@
     <div class="card-body bg-light">
         <h4 class="card-title">Login</h4>
         <EditForm OnValidSubmit="LoginUser" Model="Model" FormName="loginForm">
+            <DataAnnotationsValidator />
             <div class="row g-3">
                 <div class="col-md-6">
                     <label for="email" class="form-label">Email</label>
@@ -27,11 +28,11 @@
                     <InputText type="password" @bind-Value="Model.Password" class="form-control" placeholder="Password" />
                 </div>
                 <div class="col-md-2">
-                    <button type="submit" class="btn btn-outline-primary w-100">Login</button>
+                    <button type="submit" class="btn btn-outline-primary w-100">🔑 Login</button>
 
                 </div>
                 <div class="col-md-2">
-                    <a href="@(NavigationManager.ToAbsoluteUri("Account/Register"))" class="btn btn-outline-success w-100">Register</a>
+                    <a href="@(NavigationManager.ToAbsoluteUri("Account/Register"))" class="btn btn-outline-success w-100">🌟 Register</a>
                 </div>
             </div>
         </EditForm>
@@ -46,7 +47,7 @@
     private HttpContext HttpContext { get; set; } = default!;
 
     [SupplyParameterFromForm]
-    private InputModel Model { get; set; } = new();
+    private LoginModel Model { get; set; } = new();
 
     [SupplyParameterFromQuery]
     private string? ReturnUrl { get; set; }
@@ -77,10 +78,12 @@
         }
     }
 
-    private sealed class InputModel
+    private sealed class LoginModel
     {
+        [Required]
         public string Email { get; set; } = "";
 
+        [Required]
         public string Password { get; set; } = "";
     }
 }

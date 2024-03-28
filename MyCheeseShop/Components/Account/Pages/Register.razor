@@ -23,21 +23,42 @@
         <h4 class="card-title">Register</h4>
 
         <EditForm OnValidSubmit="RegisterUser" Model="Model" FormName="registerForm">
+            <DataAnnotationsValidator />
             <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">First Name</label>
+                    <InputText class="form-control" placeholder="First Name" @bind-Value="Model.FirstName" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Last Name</label>
+                    <InputText class="form-control" placeholder="Last Name" @bind-Value="Model.LastName" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Address</label>
+                    <InputText class="form-control" placeholder="Address" @bind-Value="Model.Address" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">City</label>
+                    <InputText class="form-control" placeholder="City" @bind-Value="Model.City" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Post Code</label>
+                    <InputText class="form-control" placeholder="Post Code" @bind-Value="Model.PostCode" />
+                </div>
                 <div class="col-md-12">
-                    <label for="email" class="form-label">Email</label>
+                    <label class="form-label">Email</label>
                     <InputText class="form-control" placeholder="Email" @bind-Value="Model.Email" />
                 </div>
                 <div class="col-md-6">
-                    <label for="password" class="form-label">Password</label>
+                    <label class="form-label">Password</label>
                     <InputText type="password" class="form-control" placeholder="Password" @bind-Value="Model.Password" />
                 </div>
                 <div class="col-md-6">
-                    <label for="name" class="form-label">Confirm Password</label>
+                    <label class="form-label">Confirm Password</label>
                     <InputText type="password" class="form-control" placeholder="Confirm Password" @bind-Value="Model.ConfirmPassword" />
                 </div>
                 <div class="col-md-2">
-                    <button type="submit" class="btn btn-outline-primary w-100">Register</button>
+                    <button type="submit" class="btn btn-outline-primary w-100">🌟 Register</button>
                 </div>
             </div>
         </EditForm>
@@ -48,7 +69,7 @@
     private IEnumerable<IdentityError>? identityErrors;
 
     [SupplyParameterFromForm]
-    private InputModel Model { get; set; } = new();
+    private RegisterModel Model { get; set; } = new();
 
     [SupplyParameterFromQuery]
     private string? ReturnUrl { get; set; }
@@ -90,15 +111,34 @@
         RedirectManager.RedirectTo(ReturnUrl);
     }
 
-    private sealed class InputModel
+    private sealed class RegisterModel
     {
+        [Required]
+        [EmailAddress]
         public string Email { get; set; } = "";
+        
+        [Required]
+        [DataType(DataType.Password)]
         public string Password { get; set; } = "";
+        
+        [Required]
+        [DataType(DataType.Password)]
+        [Compare("Password")]
         public string ConfirmPassword { get; set; } = "";
+        
+        [Required]
         public string FirstName { get; set; } = "";
+        
+        [Required]
         public string LastName { get; set; } = "";
+        
+        [Required]
         public string Address { get; set; } = "";     
+        
+        [Required]
         public string City { get; set; } = "";
+        
+        [Required]
         public string PostCode { get; set; } = "";
     }
 }
