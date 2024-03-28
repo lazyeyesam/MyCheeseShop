@@ -1,0 +1,74 @@
+﻿@page "/orders"
+@inject OrderProvider OrderProvider
+
+<PageTitle>EasyBriezy - Orders</PageTitle>
+
+<h3>Orders</h3>
+
+@if (orders is null)
+{
+    <p>Loading...</p>
+}
+else if (!orders.Any())
+{
+    <p>No orders found</p>
+}
+else
+{
+    <div class="row">
+        <div class="col-6">
+            <div class="card h-100">
+                <div class="card-body bg-light">
+                    <h4 class="card-title">Orders</h4>
+                    <table class="table" style="background-color: white; vertical-align:middle;">
+                        <thead>
+                            <tr>
+                                <th scope="col">Order ID</th>
+                                <th scope="col">Order Date</th>
+                                <th scope="col">Order Total</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var order in orders)
+                            {
+                                <tr>
+                                    <td scope="col">@order.Id</td>
+                                    <td scope="col">@order.Created.ToString("U")</td>
+                                    <td scope="col">@order.Total.ToString("C")</td>
+                                    <td scope="col">
+                                        <button class="btn btn-outline-primary" @onclick="() => ShowDetails(order)">Details</button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="card h-100">
+                <div class="card-body bg-light">
+                    <h4 class="card-title">Details</h4>
+                    <OrderDetails Order="selectedOrder" />
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private IEnumerable<Order>? orders;
+    private Order? selectedOrder;
+
+    protected async override Task OnInitializedAsync()
+    {
+        orders = await OrderProvider.GetAllOrdersAsync();
+        selectedOrder = orders?.FirstOrDefault();
+    }
+
+    private void ShowDetails(Order order)
+    {
+        selectedOrder = order;
+    }
+}

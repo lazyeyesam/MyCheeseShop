@@ -19,6 +19,7 @@ namespace MyCheeseShop.Context
                 .Where(order => order.User.UserName == user.UserName)
                 .Include(order => order.Items)
                 .ThenInclude(item => item.Cheese)
+                .OrderByDescending(order => order.Created)
                 .ToListAsync();
         }
 
@@ -29,6 +30,7 @@ namespace MyCheeseShop.Context
                 .Include(order => order.User)
                 .Include(order => order.Items)
                 .ThenInclude(item => item.Cheese)
+                .OrderByDescending(order => order.Created)
                 .ToListAsync();
         }
 

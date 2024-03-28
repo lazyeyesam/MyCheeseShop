@@ -18,6 +18,7 @@
   <ItemGroup>
     <Folder Include="Migrations\" />
     <Folder Include="wwwroot\img\" />
+    <Folder Include="wwwroot\favicon\" />
   </ItemGroup>
 
 </Project>

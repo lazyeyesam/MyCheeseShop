@@ -1,0 +1,42 @@
+﻿@if (Order is null)
+{
+    <p>Select an order...</p>
+}
+else
+{
+    <div class="card">
+        <div class="card-header">
+            <div class="d-flex justify-content-between">
+                <div class="col text-start">
+                    <h5><span class="badge bg-success">Order: @Order.Id</span></h5>
+                </div>
+                <div class="col text-start">
+                    <h5><span class="badge bg-dark">@Order.Created.ToString("U")</span></h5>
+                </div>
+                <div class="col text-end">
+                    <h5><span class="badge bg-primary">Placed</span></h5>
+                </div>
+            </div>
+        </div>
+        <ul class="list-group list-group-flush">
+            @foreach (OrderItem item in Order.Items)
+            {
+                <li class="list-group-item">
+                    <div class="card-container">
+                        <img src="/img/no_cheese.png" class="img-thumbnail card-img-left" alt="@item.Cheese.Name">
+                        <div class="card-body-flex">
+                            <h5 class="card-title">@item.Cheese.Name</h5>
+                            <p class="card-text">Quantity: @(item.Quantity * 100)g</p>
+                            <p class="card-text">Price: @item.Cheese.Price.ToString("C")</p>
+                            <h6 class="card-text">Total: @((item.Cheese.Price * item.Quantity).ToString("C"))</h6>
+                        </div>
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+}
+@code {
+    [Parameter]
+    public Order? Order { get; set; }
+}

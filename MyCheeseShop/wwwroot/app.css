@@ -27,3 +27,17 @@ h1:focus {
 .darker-border-checkbox.form-check-input {
     border-color: #929292;
 }
+
+.card-container {
+    display: flex;
+    align-items: center;
+}
+
+.card-img-left {
+    width: 10rem; /* Adjust as needed */
+}
+
+.card-body-flex {
+    flex: 1;
+    margin-left: 1rem;
+}
