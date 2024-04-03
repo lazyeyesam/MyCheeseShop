@@ -23,7 +23,7 @@ else
             {
                 <li class="list-group-item">
                     <div class="card-container">
-                        <img src="/img/no_cheese.png" class="img-thumbnail card-img-left" alt="@item.Cheese.Name">
+                        <img src="/img/cheeses/@item.Cheese.ImageUrl" class="img-thumbnail card-img-left" alt="@item.Cheese.Name" onerror="this.onerror = null; this.src='/img/no_cheese.png'">
                         <div class="card-body-flex">
                             <h5 class="card-title">@item.Cheese.Name</h5>
                             <p class="card-text">Quantity: @(item.Quantity * 100)g</p>

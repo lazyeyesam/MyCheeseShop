@@ -2,8 +2,8 @@
 @inject ShoppingCart ShoppingCart
 
 <div class="card h-100">
-    <img src="/img/no_cheese.png" class="card-img-top p-1" alt="@Cheese.Name">
-    <div class="card-body">
+    <img img src="/img/cheeses/@Cheese.ImageUrl" class="card-img-top p-1" alt="@Cheese.Name" onerror="this.onerror = null; this.src='/img/no_cheese.png'">
+    <div class="card-body d-flex flex-column">
         <h5>
             <span class="badge bg-primary">@Cheese.Type</span>&nbsp;
             <span class="badge bg-success">@Cheese.Strength</span>
@@ -13,30 +13,32 @@
             <h5><span class="badge bg-danger">@Cheese.Price.ToString("C")</span></h5>
         </div>
         <p class="card-text">@Cheese.Description</p>
-        <EditForm Model="quantity" OnSubmit="AddToCart">
-            <div class="row">
-                <div class="col">
-                    <InputSelect class="form-select w-100" @bind-Value="quantity" required>
-                        @for (var i = 1; i <= 5; i++)
-                        {
-                            <option value="@i">@(i * 100)g</option>
-                        }
-                    </InputSelect>
+        <div class="mt-auto">
+            <EditForm Model="quantity" OnSubmit="AddToCart">
+                <div class="row">
+                    <div class="col">
+                        <InputSelect class="form-select w-100" @bind-Value="quantity" required>
+                            @for (var i = 1; i <= 5; i++)
+                            {
+                                <option value="@i">@(i * 100)g</option>
+                            }
+                        </InputSelect>
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-primary position-relative w-100">
+                            Add to cart
+                            @if (ShoppingCart.GetQuantity(Cheese) > 0)
+                            {
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    @ShoppingCart.GetQuantity(Cheese)
+                                    <span class="visually-hidden">@Cheese.Name in shopping cart</span>
+                                </span>
+                            }
+                        </button>
+                    </div>
                 </div>
-                <div class="col">
-                    <button class="btn btn-primary position-relative w-100">
-                        Add to cart
-                        @if (ShoppingCart.GetQuantity(Cheese) > 0)
-                        {
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                @ShoppingCart.GetQuantity(Cheese)
-                                <span class="visually-hidden">@Cheese.Name in shopping cart</span>
-                            </span>
-                        }
-                    </button>
-                </div>
-            </div>
-        </EditForm>
+            </EditForm>
+        </div>
     </div>
 </div>
 
