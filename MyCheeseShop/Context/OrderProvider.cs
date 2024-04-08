@@ -43,13 +43,30 @@ namespace MyCheeseShop.Context
                 Items = items.Select(item => new OrderItem
                 {
                     Cheese = item.Cheese,
-                    Quantity = item.Quantity
+                    Quantity = item.Quantity,
                 }).ToList(),
-                Created = DateTime.Now
+                Created = DateTime.Now,
+                Status = OrderStatus.Placed
             };
 
             // Add the order to the database
             _context.Orders.Add(order);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DispatchOrder(Order order)
+        {
+            // Update the order status to dispatched
+            order.Status = OrderStatus.Dispatched;
+            _context.Orders.Update(order);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task CancelOrder(Order order)
+        {
+            // Update the order status to cancelled
+            order.Status = OrderStatus.Cancelled;
+            _context.Orders.Update(order);
             await _context.SaveChangesAsync();
         }
     }

@@ -1,0 +1,142 @@
+﻿@page "/all-orders"
+@inject OrderProvider OrderProvider
+@attribute [Authorize(Roles = "Admin")]
+
+<PageTitle>EasyBriezy - Orders</PageTitle>
+
+<h3>Orders</h3>
+
+@if (orders is null)
+{
+    <p>Loading...</p>
+}
+else if (!orders.Any())
+{
+    <p>No orders found</p>
+}
+else
+{
+    <div class="row">
+        <div class="col-6">
+            <div class="card h-100">
+                <div class="card-body bg-light">
+                    <div class="d-flex justify-content-center card-title">
+                        <div class="btn-group" role="group" aria-label="Order status filters">
+                            <input type="radio" class="btn-check" name="btnRadio" id="btnAll" autocomplete="off" checked @onclick="() => FilterOrders(OrderStatus.None)">
+                            <label class="btn btn-outline-secondary order-filter" for="btnAll">All</label>
+
+                            <input type="radio" class="btn-check" name="btnRadio" id="btnPlaced" autocomplete="off" @onclick="() => FilterOrders(OrderStatus.Placed)">
+                            <label class="btn btn-outline-primary order-filter" for="btnPlaced">Placed</label>
+
+                            <input type="radio" class="btn-check" name="btnRadio" id="btnDispatched" autocomplete="off" @onclick="() => FilterOrders(OrderStatus.Dispatched)">
+                            <label class="btn btn-outline-success order-filter" for="btnDispatched">Dispatched</label>
+
+                            <input type="radio" class="btn-check" name="btnRadio" id="btnCancelled" autocomplete="off" @onclick="() => FilterOrders(OrderStatus.Cancelled)">
+                            <label class="btn btn-outline-danger order-filter" for="btnCancelled">Cancelled</label>
+                        </div>
+                    </div>
+                    <table class="table" style="background-color: white; vertical-align:middle;">
+                        <thead>
+                            <tr>
+                                <th scope="col">Id</th>
+                                <th scope="col">Ordered</th>
+                                <th scope="col">Total</th>
+                                <th scope="col">User</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var order in FilteredOrders!)
+                            {
+                                <tr>
+                                    <td scope="col" class="@GetCellColour(order.Status)">@order.Id</td>
+                                    <td scope="col">@order.Created.ToString("dd MMMM yyyy")</td>
+                                    <td scope="col">@order.Total.ToString("C")</td>
+                                    <td scope="col">@order.User.Email</td>
+                                    <td scope="col">
+                                        <button class="btn btn-outline-primary" @onclick="() => ShowDetails(order)">🔍</button>
+                                        @if (order.Status == OrderStatus.Placed)
+                                        {
+                                            <button class="btn btn-outline-success ms-1" @onclick="() => DispatchOrder(order)">📨</button>
+                                        }
+                                        @if (order.Status != OrderStatus.Cancelled)
+                                        {
+                                            <button class="btn btn-outline-danger ms-1" @onclick="() => CancelOrder(order)">❌</button>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                            @if (!FilteredOrders.Any())
+                            {
+                                <tr>
+                                    <td colspan="5">No orders found</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="card h-100">
+                <div class="card-body bg-light">
+                    <h4 class="card-title">Details</h4>
+                    <OrderDetails Order="selectedOrder" />
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private IEnumerable<Order>? orders;
+    private OrderStatus selectedFilter = OrderStatus.None;
+
+    private IEnumerable<Order>? FilteredOrders => orders?.Where(order => selectedFilter switch
+    {
+        OrderStatus.Placed => order.Status == OrderStatus.Placed,
+        OrderStatus.Dispatched => order.Status == OrderStatus.Dispatched,
+        OrderStatus.Cancelled => order.Status == OrderStatus.Cancelled,
+        _ => true
+    });
+
+    private Order? selectedOrder;
+
+    protected async override Task OnInitializedAsync()
+    {
+        orders = await OrderProvider.GetAllOrdersAsync();
+        selectedOrder = FilteredOrders?.FirstOrDefault();
+    }
+
+    private void ShowDetails(Order order)
+    {
+        selectedOrder = order;
+    }
+
+    private async Task DispatchOrder(Order order)
+    {
+        await OrderProvider.DispatchOrder(order);
+    }
+
+    private async Task CancelOrder(Order order)
+    {
+        await OrderProvider.CancelOrder(order);
+    }
+
+    private void FilterOrders(OrderStatus status)
+    {
+        selectedFilter = status;
+        selectedOrder = FilteredOrders?.FirstOrDefault();
+    }
+
+    private string GetCellColour(OrderStatus status)
+    {
+        return status switch
+        {
+            OrderStatus.Placed => "table-primary",
+            OrderStatus.Dispatched => "table-success",
+            OrderStatus.Cancelled => "table-danger",
+            _ => ""
+        };
+    }
+}

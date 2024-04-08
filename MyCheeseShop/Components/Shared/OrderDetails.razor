@@ -14,8 +14,11 @@ else
                     <h5><span class="badge bg-dark">@Order.Created.ToString("U")</span></h5>
                 </div>
                 <div class="col text-end">
-                    <h5><span class="badge bg-primary">Placed</span></h5>
+                    <h5><span class="badge @GetStatusColour(Order.Status)">@Order.Status.ToString()</span></h5>
                 </div>
+            </div>
+            <div class="col text-end">
+                <h5>Total: @Order.Total.ToString("C")</h5>
             </div>
         </div>
         <ul class="list-group list-group-flush">
@@ -28,7 +31,7 @@ else
                             <h5 class="card-title">@item.Cheese.Name</h5>
                             <p class="card-text">Quantity: @(item.Quantity * 100)g</p>
                             <p class="card-text">Price: @item.Cheese.Price.ToString("C")</p>
-                            <h6 class="card-text">Total: @((item.Cheese.Price * item.Quantity).ToString("C"))</h6>
+                            <h6 class="card-text">Total: @item.Total.ToString("C"))</h6>
                         </div>
                     </div>
                 </li>
@@ -39,4 +42,15 @@ else
 @code {
     [Parameter]
     public Order? Order { get; set; }
+
+    private string GetStatusColour(OrderStatus status)
+    {
+        return status switch
+        {
+            OrderStatus.Placed => "bg-primary",
+            OrderStatus.Dispatched => "bg-success",
+            OrderStatus.Cancelled => "bg-danger",
+            _ => "bg-secondary"
+        };
+    }
 }
