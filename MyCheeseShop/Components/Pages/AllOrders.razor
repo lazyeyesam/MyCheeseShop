@@ -58,9 +58,6 @@ else
                                         @if (order.Status == OrderStatus.Placed)
                                         {
                                             <button class="btn btn-outline-success ms-1" @onclick="() => DispatchOrder(order)">📨</button>
-                                        }
-                                        @if (order.Status != OrderStatus.Cancelled)
-                                        {
                                             <button class="btn btn-outline-danger ms-1" @onclick="() => CancelOrder(order)">❌</button>
                                         }
                                     </td>

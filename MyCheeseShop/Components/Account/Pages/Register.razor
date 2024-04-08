@@ -18,52 +18,67 @@
 <PageTitle>Register</PageTitle>
 <StatusMessage Message="@statusMessage" IsError="@isError" />
 
-<div class="card">
-    <div class="card-body bg-light">
-        <h4 class="card-title">Register</h4>
+<h3>Register</h3>
 
-        <EditForm OnValidSubmit="RegisterUser" Model="Model" FormName="registerForm">
-            <DataAnnotationsValidator />
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <label class="form-label">First Name</label>
-                    <InputText class="form-control" placeholder="First Name" @bind-Value="Model.FirstName" />
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">Last Name</label>
-                    <InputText class="form-control" placeholder="Last Name" @bind-Value="Model.LastName" />
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Address</label>
-                    <InputText class="form-control" placeholder="Address" @bind-Value="Model.Address" />
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">City</label>
-                    <InputText class="form-control" placeholder="City" @bind-Value="Model.City" />
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Post Code</label>
-                    <InputText class="form-control" placeholder="Post Code" @bind-Value="Model.PostCode" />
-                </div>
-                <div class="col-md-12">
-                    <label class="form-label">Email</label>
-                    <InputText class="form-control" placeholder="Email" @bind-Value="Model.Email" />
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">Password</label>
-                    <InputText type="password" class="form-control" placeholder="Password" @bind-Value="Model.Password" />
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">Confirm Password</label>
-                    <InputText type="password" class="form-control" placeholder="Confirm Password" @bind-Value="Model.ConfirmPassword" />
-                </div>
-                <div class="col-md-2">
-                    <button type="submit" class="btn btn-outline-primary w-100">🌟 Register</button>
+<EditForm OnValidSubmit="RegisterUser" Model="Model" FormName="registerForm">
+    <DataAnnotationsValidator />
+
+    <div class="row">
+        <div class="col-6">
+            <div class="card h-100">
+                <div class="card-body bg-light">
+                    <h5 class="card-title">About you</h5>
+                    <div class="mb-2">
+                        <label class="form-label">First Name</label>
+                        <InputText class="form-control" placeholder="First Name" @bind-Value="Model.FirstName" />
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Last Name</label>
+                        <InputText class="form-control" placeholder="Last Name" @bind-Value="Model.LastName" />
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Address</label>
+                        <InputText class="form-control" placeholder="Address" @bind-Value="Model.Address" />
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">City</label>
+                        <InputText class="form-control" placeholder="City" @bind-Value="Model.City" />
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Post Code</label>
+                        <InputText class="form-control" placeholder="Post Code" @bind-Value="Model.PostCode" />
+                    </div>
                 </div>
             </div>
-        </EditForm>
+        </div>
+        <div class="col-6">
+            <div class="card h-100">
+                <div class="card-body bg-light d-flex flex-column">
+                    <h5 class="card-title">Login details</h5>
+
+                    <div class="mb-2">
+                        <label class="form-label">Email</label>
+                        <InputText class="form-control" placeholder="you@example.com" @bind-Value="Model.Email" />
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Password</label>
+                        <InputText type="password" class="form-control" placeholder="Password" @bind-Value="Model.Password" />
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Confirm Password</label>
+                        <InputText type="password" class="form-control" placeholder="Confirm Password" @bind-Value="Model.ConfirmPassword" />
+                    </div>
+                    <div class="mt-auto mb-2">
+                        <button type="submit" class="btn btn-outline-primary w-100">🌟 Register</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+
+    
+
+</EditForm>
 
 @code {
     private IEnumerable<IdentityError>? identityErrors;
@@ -81,15 +96,15 @@
     {
         // create the user
         var user = new User
-        {
-            UserName = Model.Email,
-            Email = Model.Email,
-            FirstName = Model.FirstName,
-            LastName = Model.LastName,
-            Address = Model.Address,
-            City = Model.City,
-            PostCode = Model.PostCode
-        };
+            {
+                UserName = Model.Email,
+                Email = Model.Email,
+                FirstName = Model.FirstName,
+                LastName = Model.LastName,
+                Address = Model.Address,
+                City = Model.City,
+                PostCode = Model.PostCode
+            };
 
         // add to the database
         var result = await UserManager.CreateAsync(user, Model.Password);
@@ -116,28 +131,28 @@
         [Required]
         [EmailAddress]
         public string Email { get; set; } = "";
-        
+
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; } = "";
-        
+
         [Required]
         [DataType(DataType.Password)]
         [Compare("Password")]
         public string ConfirmPassword { get; set; } = "";
-        
+
         [Required]
         public string FirstName { get; set; } = "";
-        
+
         [Required]
         public string LastName { get; set; } = "";
-        
+
         [Required]
-        public string Address { get; set; } = "";     
-        
+        public string Address { get; set; } = "";
+
         [Required]
         public string City { get; set; } = "";
-        
+
         [Required]
         public string PostCode { get; set; } = "";
     }

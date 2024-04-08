@@ -6,10 +6,30 @@
 
 <PageTitle>EasyBriezy - Home</PageTitle>
 
+@if (cheeses is null)
+{
+    <p>Loading...</p>
+}
+else if (!cheeses.Any())
+{
+    <p>No cheeses found</p>
+}
+
 <div class="container mt-2">
-    <div class="d-flex justify-content-between">
-        <div>
-            <h3>Our wonderful cheese</h3>
+    <div class="d-flex justify-content-between mb-1">
+        <div class="d-flex">
+            <div class="dropdown me-1">
+                <a class="btn btn-outline-primary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Sort by @sortCriteria.ToString()
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" @onclick="() => sortCriteria = SortCriteria.Name">Name</a></li>
+                    <li><a class="dropdown-item" @onclick="() => sortCriteria = SortCriteria.Price">Price</a></li>
+                    <li><a class="dropdown-item" @onclick="() => sortCriteria = SortCriteria.Type">Type</a></li>
+                    <li><a class="dropdown-item" @onclick="() => sortCriteria = SortCriteria.Strength">Strength</a></li>
+                </ul>
+            </div>
+            <input type="text" class="form-control" placeholder="Search for cheese..." @bind="searchTerm" @bind:event="oninput">
         </div>
         <div>
             <a @onclick="GoToCart" class="btn btn-outline-primary">🛒 Cart (@ShoppingCart.Count())</a>
@@ -17,17 +37,25 @@
     </div>
     <div class="row row-cols-1 row-cols-md-4 g-4">
 
-        @foreach (var cheese in cheeses)
+        @foreach (var cheese in FilteredCheeses)
         {
             <div class="col">
                 <StoreItem Cheese="cheese" />
             </div>
         }
+        @if (!FilteredCheeses.Any())
+        {
+            <p>🙁 No cheeses found</p>
+        }
     </div>
 </div>
 
 @code {
+    private string searchTerm = "";
+    private SortCriteria sortCriteria = SortCriteria.Name;
+
     private IEnumerable<Cheese> cheeses;
+    private IEnumerable<Cheese> FilteredCheeses => cheeses.Where(GetSearchCriteria).OrderBy(GetSortCriteria);
 
     protected override async Task OnInitializedAsync()
     {
@@ -38,5 +66,38 @@
     private void GoToCart()
     {
         NavigationManager.NavigateTo("/cart");
+    }
+
+    private bool GetSearchCriteria(Cheese cheese)
+    {
+        if (string.IsNullOrWhiteSpace(searchTerm))
+        {
+            return true;
+        }
+
+        return cheese.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)
+            || cheese.Type.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)
+            || cheese.Description.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)
+            || cheese.Strength.Contains(searchTerm, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private Func<Cheese, string> GetSortCriteria(Cheese cheese)
+    {
+        return sortCriteria switch
+        {
+            SortCriteria.Name =>  cheese => cheese.Name,
+            SortCriteria.Price => cheese => cheese.Price.ToString(),
+            SortCriteria.Type => cheese => cheese.Type,
+            SortCriteria.Strength => cheese => cheese.Strength,
+            _ => cheese => cheese.Name
+        };
+    }
+
+    private enum SortCriteria
+    {
+        Name,
+        Price,
+        Type,
+        Strength
     }
 }
