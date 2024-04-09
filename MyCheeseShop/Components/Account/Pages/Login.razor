@@ -19,9 +19,9 @@
         <EditForm OnValidSubmit="LoginUser" Model="Model" FormName="loginForm">
             <DataAnnotationsValidator />
             <div class="row g-3">
-                <div class="col-md-6">
-                    <label for="email" class="form-label">Email</label>
-                    <InputText @bind-Value="Model.Email" class="form-control" placeholder="name@example.com" />
+                <div class="form-group col-md-6">
+                    <label for="email">Email</label>
+                    <InputText id="email" @bind-Value="Model.Email" class="form-control" placeholder="name@example.com" />
                     <div class="small">
                         <ValidationMessage For="@(() => Model!.Email)" />
                         @if (!string.IsNullOrEmpty(Model.Email) && !new EmailAddressAttribute().IsValid(Model.Email))
@@ -30,9 +30,9 @@
                         }
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <label for="password" class="form-label">Password</label>
-                    <InputText type="password" @bind-Value="Model.Password" class="form-control" placeholder="Password" />
+                <div class="form-group col-md-6">
+                    <label for="password">Password</label>
+                    <InputText id="password" type="password" @bind-Value="Model.Password" class="form-control" placeholder="Password" />
                     <div class="small">
                         <ValidationMessage For="@(() => Model!.Password)" />
                     </div>

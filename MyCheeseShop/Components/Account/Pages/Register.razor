@@ -28,37 +28,37 @@
             <div class="card h-100">
                 <div class="card-body bg-light">
                     <h5 class="card-title">About you</h5>
-                    <div class="mb-2">
-                        <label class="form-label">First Name</label>
-                        <InputText class="form-control" placeholder="First Name" @bind-Value="Model.FirstName" />
+                    <div class="form-group mb-2">
+                        <label for="firstname">First Name</label>
+                        <InputText id="firstname" class="form-control" placeholder="First Name" @bind-Value="Model.FirstName" />
                         <div class="small">
                             <ValidationMessage For="@(() => Model!.FirstName)" />
                         </div>
                     </div>
-                    <div class="mb-2">
-                        <label class="form-label">Last Name</label>
-                        <InputText class="form-control" placeholder="Last Name" @bind-Value="Model.LastName" />
+                    <div class="form-group mb-2">
+                        <label for="lastname">Last Name</label>
+                        <InputText id="lastname" class="form-control" placeholder="Last Name" @bind-Value="Model.LastName" />
                         <div class="small">
                             <ValidationMessage For="@(() => Model!.LastName)" />
                         </div>
                     </div>
-                    <div class="mb-2">
-                        <label class="form-label">Address</label>
-                        <InputText class="form-control" placeholder="Address" @bind-Value="Model.Address" />
+                    <div class="form-group mb-2">
+                        <label for="address">Address</label>
+                        <InputText id="address" class="form-control" placeholder="Address" @bind-Value="Model.Address" />
                         <div class="small">
                             <ValidationMessage For="@(() => Model!.Address)" />
                         </div>
                     </div>
-                    <div class="mb-2">
-                        <label class="form-label">City</label>
-                        <InputText class="form-control" placeholder="City" @bind-Value="Model.City" />
+                    <div class="form-group mb-2">
+                        <label for="city">City</label>
+                        <InputText id="city" class="form-control" placeholder="City" @bind-Value="Model.City" />
                         <div class="small">
                             <ValidationMessage For="@(() => Model!.City)" />
                         </div>
                     </div>
-                    <div class="mb-2">
-                        <label class="form-label">Post Code</label>
-                        <InputText class="form-control" placeholder="Post Code" @bind-Value="Model.PostCode" />
+                    <div class="form-group mb-2">
+                        <label for="postcode">Post Code</label>
+                        <InputText id="postcode" class="form-control" placeholder="Post Code" @bind-Value="Model.PostCode" />
                         <div class="small">
                             <ValidationMessage For="@(() => Model!.PostCode)" />
                         </div>
@@ -71,23 +71,23 @@
                 <div class="card-body bg-light d-flex flex-column">
                     <h5 class="card-title">Login details</h5>
 
-                    <div class="mb-2">
-                        <label class="form-label">Email</label>
-                        <InputText class="form-control" placeholder="you@example.com" @bind-Value="Model.Email" />
+                    <div class="form-group mb-2">
+                        <label for="email">Email</label>
+                        <InputText id="email" class="form-control" placeholder="you@example.com" @bind-Value="Model.Email" />
                         <div class="small">
                             <ValidationMessage For="@(() => Model!.Email)" />
                         </div>
                     </div>
-                    <div class="mb-2">
-                        <label class="form-label">Password</label>
-                        <InputText type="password" class="form-control" placeholder="Password" @bind-Value="Model.Password" />
+                    <div class="form-group mb-2">
+                        <label for="password">Password</label>
+                        <InputText id="password" type="password" class="form-control" placeholder="Password" @bind-Value="Model.Password" />
                         <div class="small">
                             <ValidationMessage For="@(() => Model!.Password)" />
                         </div>
                     </div>
-                    <div class="mb-2">
-                        <label class="form-label">Confirm Password</label>
-                        <InputText type="password" class="form-control" placeholder="Confirm Password" @bind-Value="Model.ConfirmPassword" />
+                    <div class="form-group mb-2">
+                        <label for="confirm">Confirm Password</label>
+                        <InputText id="confirm" type="password" class="form-control" placeholder="Confirm Password" @bind-Value="Model.ConfirmPassword" />
                         <div class="small">
                             <ValidationMessage For="@(() => Model!.ConfirmPassword)" />
                         </div>

@@ -1,0 +1,101 @@
+﻿<EditForm Model="@Model" OnValidSubmit="@HandleSubmit">
+    <div class="row">
+        <div class="col-6">
+            <div class="card h-100">
+                <div class="card-body bg-light">
+                    <h4 class="card-title">Cheese details</h4>
+
+                    <div class="form-group mb-2">
+                        <label for="name">Name</label>
+                        <InputText id="name" class="form-control" @bind-Value="@Model.Name" />
+                        <ValidationMessage For="@(() => Model.Name)" />
+                    </div>
+                    <div class="form-group mb-2">
+                        <label for="type">Type</label>
+                        <InputText id="type" class="form-control" @bind-Value="@Model.Type" />
+                        <ValidationMessage For="@(() => Model.Type)" />
+                    </div>
+                    <div class="form-group mb-2">
+                        <label for="description">Description</label>
+                        <InputTextArea id="description" class="form-control" @bind-Value="@Model.Description" rows="5"/>
+                        <ValidationMessage For="@(() => Model.Description)" />
+                    </div>
+                    <div class="form-group mb-2">
+                        <label for="strength">Strength</label>
+                        <InputText id="strength" class="form-control" @bind-Value="@Model.Strength" />
+                        <ValidationMessage For="@(() => Model.Strength)" />
+                    </div>
+                    <div class="form-group mb-2">
+                        <label for="price">Price</label>
+                        <InputNumber id="price" class="form-control" @bind-Value="@Model.Price" />
+                        <ValidationMessage For="@(() => Model.Price)" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="card h-100">
+                <div class="card-body bg-light d-flex flex-column">
+                    <h4 class="card-title">Cheese image</h4>
+                    <div class="form-group mb-2">
+                        <InputFile id="imageUrl" class="form-control" @bind-Value="@Model.ImageUrl" />
+                        <ValidationMessage For="@(() => Model.ImageUrl)" />
+                    </div>
+                    <div class="mb-2">
+                        <img src="/img/cheeses/@Model.ImageUrl" class="img-thumbnail" alt="@Model.Name" onerror="this.onerror = null; this.src='/img/no_cheese.png'">
+                    </div>
+                    <div class="mt-auto">
+                        <button type="submit" class="btn btn-outline-primary w-100">🧀 @(Cheese is null ? "Add cheese" : "Update cheese")</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public Cheese? Cheese { get; set; }
+
+    private CheeseModel Model { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Model = Cheese is null ? new CheeseModel() : new CheeseModel(Cheese);
+    }
+
+    private void HandleSubmit()
+    {
+        // Handle form submission logic here
+    }
+
+    private sealed class CheeseModel
+    {
+        [Required]
+        public string Name { get; set; } = "";
+        [Required]
+        public string Type { get; set; } = "";
+        [Required]
+        public string Description { get; set; } = "";
+        [Required]
+        public string Strength { get; set; } = "";
+        [Required]
+        public decimal Price { get; set; }
+        [Required]
+        public string? ImageUrl { get; set; } = "";
+
+        public CheeseModel()
+        {
+        }
+
+        public CheeseModel(Cheese cheese)
+        {
+            Name = cheese.Name;
+            Type = cheese.Type;
+            Description = cheese.Description;
+            Strength = cheese.Strength;
+            Price = cheese.Price;
+            ImageUrl = cheese.ImageUrl;
+        }
+    }
+}

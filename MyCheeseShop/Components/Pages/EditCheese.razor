@@ -1,0 +1,39 @@
+﻿@page "/edit-cheese"
+@inject CheeseProvider CheeseProvider
+
+<h3>Edit Cheese</h3>
+
+@if (cheeses is null)
+{
+    <p>Loading...</p>
+}
+else if (!cheeses.Any())
+{
+    <p>No cheeses found</p>
+}
+else
+{
+    <div class="col-3 mb-2">
+        <label for="cheeseSelect">Select Cheese:</label>
+        <select id="cheeseSelect" class="form-select" @bind=" selectedCheeseId">
+            @foreach (var cheese in cheeses)
+            {
+                <option value="@cheese.Id">@cheese.Name</option>
+            }
+        </select>
+    </div>
+    <CheeseForm Cheese="selectedCheese" />
+}
+
+@code {
+    private IEnumerable<Cheese>? cheeses;
+    private int? selectedCheeseId;
+    private Cheese? selectedCheese;
+
+    protected async override Task OnInitializedAsync()
+    {
+        cheeses = await CheeseProvider.GetAllCheesesAsync();
+        selectedCheese = cheeses?.FirstOrDefault();
+        selectedCheeseId = selectedCheese?.Id;
+    }
+}
