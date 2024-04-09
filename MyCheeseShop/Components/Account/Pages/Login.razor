@@ -22,10 +22,20 @@
                 <div class="col-md-6">
                     <label for="email" class="form-label">Email</label>
                     <InputText @bind-Value="Model.Email" class="form-control" placeholder="name@example.com" />
+                    <div class="small">
+                        <ValidationMessage For="@(() => Model!.Email)" />
+                        @if (!string.IsNullOrEmpty(Model.Email) && !new EmailAddressAttribute().IsValid(Model.Email))
+                        {
+                            <div class="text-danger">Please enter a valid email address.</div>
+                        }
+                    </div>
                 </div>
                 <div class="col-md-6">
                     <label for="password" class="form-label">Password</label>
                     <InputText type="password" @bind-Value="Model.Password" class="form-control" placeholder="Password" />
+                    <div class="small">
+                        <ValidationMessage For="@(() => Model!.Password)" />
+                    </div>
                 </div>
                 <div class="col-md-2">
                     <button type="submit" class="btn btn-outline-primary w-100">🔑 Login</button>
@@ -80,10 +90,11 @@
 
     private sealed class LoginModel
     {
-        [Required]
+        [Required(ErrorMessage = "Email is required.")]
+        [EmailAddress(ErrorMessage = "Please enter a valid email address.")]
         public string Email { get; set; } = "";
 
-        [Required]
+        [Required(ErrorMessage = "Password is required.")]
         public string Password { get; set; } = "";
     }
 }

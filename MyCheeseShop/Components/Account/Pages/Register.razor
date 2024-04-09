@@ -31,22 +31,37 @@
                     <div class="mb-2">
                         <label class="form-label">First Name</label>
                         <InputText class="form-control" placeholder="First Name" @bind-Value="Model.FirstName" />
+                        <div class="small">
+                            <ValidationMessage For="@(() => Model!.FirstName)" />
+                        </div>
                     </div>
                     <div class="mb-2">
                         <label class="form-label">Last Name</label>
                         <InputText class="form-control" placeholder="Last Name" @bind-Value="Model.LastName" />
+                        <div class="small">
+                            <ValidationMessage For="@(() => Model!.LastName)" />
+                        </div>
                     </div>
                     <div class="mb-2">
                         <label class="form-label">Address</label>
                         <InputText class="form-control" placeholder="Address" @bind-Value="Model.Address" />
+                        <div class="small">
+                            <ValidationMessage For="@(() => Model!.Address)" />
+                        </div>
                     </div>
                     <div class="mb-2">
                         <label class="form-label">City</label>
                         <InputText class="form-control" placeholder="City" @bind-Value="Model.City" />
+                        <div class="small">
+                            <ValidationMessage For="@(() => Model!.City)" />
+                        </div>
                     </div>
                     <div class="mb-2">
                         <label class="form-label">Post Code</label>
                         <InputText class="form-control" placeholder="Post Code" @bind-Value="Model.PostCode" />
+                        <div class="small">
+                            <ValidationMessage For="@(() => Model!.PostCode)" />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -59,14 +74,26 @@
                     <div class="mb-2">
                         <label class="form-label">Email</label>
                         <InputText class="form-control" placeholder="you@example.com" @bind-Value="Model.Email" />
+                        <div class="small">
+                            <ValidationMessage For="@(() => Model!.Email)" />
+                        </div>
                     </div>
                     <div class="mb-2">
                         <label class="form-label">Password</label>
                         <InputText type="password" class="form-control" placeholder="Password" @bind-Value="Model.Password" />
+                        <div class="small">
+                            <ValidationMessage For="@(() => Model!.Password)" />
+                        </div>
                     </div>
                     <div class="mb-2">
                         <label class="form-label">Confirm Password</label>
                         <InputText type="password" class="form-control" placeholder="Confirm Password" @bind-Value="Model.ConfirmPassword" />
+                        <div class="small">
+                            <ValidationMessage For="@(() => Model!.ConfirmPassword)" />
+                        </div>
+                    </div>
+                    <div class="small">
+                        <ValidationSummary />   
                     </div>
                     <div class="mt-auto mb-2">
                         <button type="submit" class="btn btn-outline-primary w-100">🌟 Register</button>
@@ -76,7 +103,7 @@
         </div>
     </div>
 
-    
+
 
 </EditForm>
 
@@ -128,32 +155,32 @@
 
     private sealed class RegisterModel
     {
-        [Required]
-        [EmailAddress]
+        [Required(ErrorMessage = "Please enter your email.")]
+        [EmailAddress(ErrorMessage = "Please enter a valid email address.")]
         public string Email { get; set; } = "";
 
-        [Required]
+        [Required(ErrorMessage = "Please enter a password.")]
         [DataType(DataType.Password)]
         public string Password { get; set; } = "";
 
-        [Required]
+        [Required(ErrorMessage = "Please confirm your password.")]
         [DataType(DataType.Password)]
-        [Compare("Password")]
+        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; } = "";
 
-        [Required]
+        [Required(ErrorMessage = "Please enter your first name.")]
         public string FirstName { get; set; } = "";
 
-        [Required]
+        [Required(ErrorMessage = "Please enter your last name.")]
         public string LastName { get; set; } = "";
 
-        [Required]
+        [Required(ErrorMessage = "Please enter your address.")]
         public string Address { get; set; } = "";
 
-        [Required]
+        [Required(ErrorMessage = "Please enter your city.")]
         public string City { get; set; } = "";
 
-        [Required]
+        [Required(ErrorMessage = "Please enter your post code.")]
         public string PostCode { get; set; } = "";
     }
 }
