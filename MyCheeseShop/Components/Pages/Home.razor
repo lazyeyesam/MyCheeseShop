@@ -23,10 +23,10 @@ else if (!cheeses.Any())
                     Sort by @sortCriteria.ToString()
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" @onclick="() => sortCriteria = SortCriteria.Name">Name</a></li>
-                    <li><a class="dropdown-item" @onclick="() => sortCriteria = SortCriteria.Price">Price</a></li>
-                    <li><a class="dropdown-item" @onclick="() => sortCriteria = SortCriteria.Type">Type</a></li>
-                    <li><a class="dropdown-item" @onclick="() => sortCriteria = SortCriteria.Strength">Strength</a></li>
+                    <li><a class="dropdown-item" @onclick="() => Sort(SortCriteria.Name)">Name</a></li>
+                    <li><a class="dropdown-item" @onclick="() => Sort(SortCriteria.Price)">Price</a></li>
+                    <li><a class="dropdown-item" @onclick="() => Sort(SortCriteria.Type)">Type</a></li>
+                    <li><a class="dropdown-item" @onclick="() => Sort(SortCriteria.Strength)">Strength</a></li>
                 </ul>
             </div>
             <input type="text" class="form-control" placeholder="Search for cheese..." @bind="searchTerm" @bind:event="oninput">
@@ -51,15 +51,27 @@ else if (!cheeses.Any())
 </div>
 
 @code {
+    private IEnumerable<Cheese> cheeses;
     private string searchTerm = "";
     private SortCriteria sortCriteria = SortCriteria.Name;
 
-    private IEnumerable<Cheese> cheeses;
-    private IEnumerable<Cheese> FilteredCheeses => cheeses.Where(GetSearchCriteria).OrderBy(GetSortCriteria);
+    private IEnumerable<Cheese> filteredCheeses;
+    private IEnumerable<Cheese> FilteredCheeses
+    {
+        get
+        {
+            return filteredCheeses.Where(GetSearchCriteria);
+        }
+        set
+        {
+            filteredCheeses = value;
+        }
+    }
 
     protected override async Task OnInitializedAsync()
     {
         cheeses = await CheeseProvider.GetAllCheesesAsync();
+        filteredCheeses = cheeses;
         ShoppingCart.OnCartUpdated += StateHasChanged;
     }
 
@@ -70,10 +82,7 @@ else if (!cheeses.Any())
 
     private bool GetSearchCriteria(Cheese cheese)
     {
-        if (string.IsNullOrWhiteSpace(searchTerm))
-        {
-            return true;
-        }
+        if (string.IsNullOrWhiteSpace(searchTerm)) return true;
 
         return cheese.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)
             || cheese.Type.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)
@@ -81,15 +90,16 @@ else if (!cheeses.Any())
             || cheese.Strength.Contains(searchTerm, StringComparison.OrdinalIgnoreCase);
     }
 
-    private Func<Cheese, string> GetSortCriteria(Cheese cheese)
+    private void Sort(SortCriteria criteria)
     {
-        return sortCriteria switch
+        sortCriteria = criteria;
+        filteredCheeses = criteria switch
         {
-            SortCriteria.Name =>  cheese => cheese.Name,
-            SortCriteria.Price => cheese => cheese.Price.ToString(),
-            SortCriteria.Type => cheese => cheese.Type,
-            SortCriteria.Strength => cheese => cheese.Strength,
-            _ => cheese => cheese.Name
+            SortCriteria.Name => FilteredCheeses = filteredCheeses.OrderBy(c => c.Name),
+            SortCriteria.Price => FilteredCheeses = filteredCheeses.OrderBy(c => c.Price),
+            SortCriteria.Type => FilteredCheeses = filteredCheeses.OrderBy(c => c.Type),
+            SortCriteria.Strength => FilteredCheeses = filteredCheeses.OrderBy(c => c.Strength),
+            _ => filteredCheeses
         };
     }
 
