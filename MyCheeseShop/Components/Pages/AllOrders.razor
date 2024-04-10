@@ -12,7 +12,7 @@
 }
 else if (!orders.Any())
 {
-    <p>No orders found</p>
+    <p>🙁 No orders found</p>
 }
 else
 {
@@ -23,16 +23,16 @@ else
                     <div class="d-flex justify-content-center card-title">
                         <div class="btn-group" role="group" aria-label="Order status filters">
                             <input type="radio" class="btn-check" name="btnRadio" id="btnAll" autocomplete="off" checked @onclick="() => FilterOrders(OrderStatus.None)">
-                            <label class="btn btn-outline-secondary order-filter" for="btnAll">All</label>
+                            <label class="btn btn-outline-secondary order-filter btn-sm" for="btnAll">All</label>
 
                             <input type="radio" class="btn-check" name="btnRadio" id="btnPlaced" autocomplete="off" @onclick="() => FilterOrders(OrderStatus.Placed)">
-                            <label class="btn btn-outline-primary order-filter" for="btnPlaced">Placed</label>
+                            <label class="btn btn-outline-primary order-filter btn-sm" for="btnPlaced">Placed</label>
 
                             <input type="radio" class="btn-check" name="btnRadio" id="btnDispatched" autocomplete="off" @onclick="() => FilterOrders(OrderStatus.Dispatched)">
-                            <label class="btn btn-outline-success order-filter" for="btnDispatched">Dispatched</label>
+                            <label class="btn btn-outline-success order-filter btn-sm" for="btnDispatched">Dispatched</label>
 
                             <input type="radio" class="btn-check" name="btnRadio" id="btnCancelled" autocomplete="off" @onclick="() => FilterOrders(OrderStatus.Cancelled)">
-                            <label class="btn btn-outline-danger order-filter" for="btnCancelled">Cancelled</label>
+                            <label class="btn btn-outline-danger order-filter btn-sm" for="btnCancelled">Cancelled</label>
                         </div>
                     </div>
                     <table class="table" style="background-color: white; vertical-align:middle;">

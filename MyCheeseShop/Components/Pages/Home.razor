@@ -12,7 +12,7 @@
 }
 else if (!cheeses.Any())
 {
-    <p>No cheeses found</p>
+    <p>🙁 No cheeses found</p>
 }
 
 <div class="container mt-2">
@@ -23,10 +23,10 @@ else if (!cheeses.Any())
                     Sort by @sortCriteria.ToString()
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" @onclick="() => Sort(SortCriteria.Name)">Name</a></li>
-                    <li><a class="dropdown-item" @onclick="() => Sort(SortCriteria.Price)">Price</a></li>
-                    <li><a class="dropdown-item" @onclick="() => Sort(SortCriteria.Type)">Type</a></li>
-                    <li><a class="dropdown-item" @onclick="() => Sort(SortCriteria.Strength)">Strength</a></li>
+                    <li><a class="dropdown-item" href="#" @onclick="() => Sort(SortCriteria.Name)">Name</a></li>
+                    <li><a class="dropdown-item" href="#" @onclick="() => Sort(SortCriteria.Price)">Price</a></li>
+                    <li><a class="dropdown-item" href="#" @onclick="() => Sort(SortCriteria.Type)">Type</a></li>
+                    <li><a class="dropdown-item" href="#" @onclick="() => Sort(SortCriteria.Strength)">Strength</a></li>
                 </ul>
             </div>
             <input type="text" class="form-control" placeholder="Search for cheese..." @bind="searchTerm" @bind:event="oninput">

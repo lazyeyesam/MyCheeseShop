@@ -1,10 +1,8 @@
 ﻿@page "/add-cheese"
+@attribute [Authorize(Roles = "Admin")]
 
 <PageTitle>Add Cheese</PageTitle>
 
-<h3>Add Cheese</h3>
+<h3>EasyBriezy - Add Cheese</h3>
+
 <CheeseForm />
-
-@code {
-
-}

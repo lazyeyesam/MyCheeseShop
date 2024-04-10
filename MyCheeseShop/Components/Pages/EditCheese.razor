@@ -1,5 +1,8 @@
 ﻿@page "/edit-cheese"
 @inject CheeseProvider CheeseProvider
+@attribute [Authorize(Roles = "Admin")]
+
+<PageTitle>EasyBriezy - Edit Cheese</PageTitle>
 
 <h3>Edit Cheese</h3>
 
@@ -9,19 +12,19 @@
 }
 else if (!cheeses.Any())
 {
-    <p>No cheeses found</p>
+    <p>🙁 No cheeses found</p>
 }
 else
 {
-    <div class="col-3 mb-2">
-        <label for="cheeseSelect">Select Cheese:</label>
-        <select id="cheeseSelect" class="form-select" @bind=" selectedCheeseId">
+    <div class="col-4 mb-2">
+        <select id="cheeseSelect" class="form-select" @onchange="OnCheeseSelected">
             @foreach (var cheese in cheeses)
             {
                 <option value="@cheese.Id">@cheese.Name</option>
             }
         </select>
     </div>
+
     <CheeseForm Cheese="selectedCheese" />
 }
 
@@ -35,5 +38,12 @@ else
         cheeses = await CheeseProvider.GetAllCheesesAsync();
         selectedCheese = cheeses?.FirstOrDefault();
         selectedCheeseId = selectedCheese?.Id;
+    }
+
+    private void OnCheeseSelected(ChangeEventArgs e)
+    {
+        if (e.Value is null) return;
+        selectedCheeseId = int.Parse(e.Value.ToString()!);
+        selectedCheese = cheeses?.FirstOrDefault(cheese => cheese.Id == selectedCheeseId);
     }
 }

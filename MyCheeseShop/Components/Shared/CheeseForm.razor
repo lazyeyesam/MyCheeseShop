@@ -1,34 +1,57 @@
-﻿<EditForm Model="@Model" OnValidSubmit="@HandleSubmit">
+﻿@inject FileUploader FileUploader
+@inject CheeseProvider CheeseProvider
+@inject NavigationManager NavigationManager
+
+<EditForm Model="@Model" OnValidSubmit="@HandleSubmit">
+    <DataAnnotationsValidator />
     <div class="row">
         <div class="col-6">
             <div class="card h-100">
-                <div class="card-body bg-light">
+                <div class="card-body bg-light d-flex flex-column">
                     <h4 class="card-title">Cheese details</h4>
 
                     <div class="form-group mb-2">
                         <label for="name">Name</label>
-                        <InputText id="name" class="form-control" @bind-Value="@Model.Name" />
-                        <ValidationMessage For="@(() => Model.Name)" />
+                        <InputText id="name" class="form-control" @bind-Value="@Model.Name" placeholder="Name" />
+                        <div class="small">
+                            <ValidationMessage For="@(() => Model.Name)" />
+                        </div>
                     </div>
                     <div class="form-group mb-2">
                         <label for="type">Type</label>
-                        <InputText id="type" class="form-control" @bind-Value="@Model.Type" />
-                        <ValidationMessage For="@(() => Model.Type)" />
+                        <InputText id="type" class="form-control" @bind-Value="@Model.Type" placeholder="Type" />
+                        <div class="small">
+                            <ValidationMessage For="@(() => Model.Type)" />
+                        </div>
                     </div>
                     <div class="form-group mb-2">
                         <label for="description">Description</label>
-                        <InputTextArea id="description" class="form-control" @bind-Value="@Model.Description" rows="5"/>
-                        <ValidationMessage For="@(() => Model.Description)" />
+                        <InputTextArea id="description" class="form-control" @bind-Value="@Model.Description" rows="5" placeholder="Add a description..." />
+                        <div class="small">
+                            <ValidationMessage For="@(() => Model.Description)" />
+                        </div>
                     </div>
                     <div class="form-group mb-2">
                         <label for="strength">Strength</label>
-                        <InputText id="strength" class="form-control" @bind-Value="@Model.Strength" />
-                        <ValidationMessage For="@(() => Model.Strength)" />
+                        <InputText id="strength" class="form-control" @bind-Value="@Model.Strength" placeholder="Strength" />
+                        <div class="small">
+                            <ValidationMessage For="@(() => Model.Strength)" />
+                        </div>
                     </div>
                     <div class="form-group mb-2">
                         <label for="price">Price</label>
-                        <InputNumber id="price" class="form-control" @bind-Value="@Model.Price" />
-                        <ValidationMessage For="@(() => Model.Price)" />
+                        <div class="input-group">
+                            <span class="input-group-text">£</span>
+                            <InputNumber id="price" class="form-control" @bind-Value="@Model.Price" placeholder="9.99" min="0.01" max="10000.00" step="0.01" />
+                            <div class="small">
+                                <ValidationMessage For="@(() => Model.Price)" />
+                            </div>
+                        </div>
+                        
+                       
+                    </div>
+                    <div class="mt-auto">
+                        <button type="submit" class="btn btn-outline-primary w-100">🧀 @(Cheese is null ? "Add cheese" : "Update cheese")</button>
                     </div>
                 </div>
             </div>
@@ -38,14 +61,13 @@
                 <div class="card-body bg-light d-flex flex-column">
                     <h4 class="card-title">Cheese image</h4>
                     <div class="form-group mb-2">
-                        <InputFile id="imageUrl" class="form-control" @bind-Value="@Model.ImageUrl" />
-                        <ValidationMessage For="@(() => Model.ImageUrl)" />
+                        <InputFile id="imageUrl" class="form-control" @bind-Value="@Model.ImageUrl" OnChange="LoadFile" />
+                        <div class="small">
+                            <ValidationMessage For="@(() => Model.ImageUrl)" />
+                        </div>
                     </div>
                     <div class="mb-2">
                         <img src="/img/cheeses/@Model.ImageUrl" class="img-thumbnail" alt="@Model.Name" onerror="this.onerror = null; this.src='/img/no_cheese.png'">
-                    </div>
-                    <div class="mt-auto">
-                        <button type="submit" class="btn btn-outline-primary w-100">🧀 @(Cheese is null ? "Add cheese" : "Update cheese")</button>
                     </div>
                 </div>
             </div>
@@ -59,29 +81,67 @@
 
     private CheeseModel Model { get; set; }
 
-    protected override void OnInitialized()
+    protected override void OnParametersSet()
     {
         Model = Cheese is null ? new CheeseModel() : new CheeseModel(Cheese);
+        base.OnParametersSet();
     }
 
-    private void HandleSubmit()
+    private async Task LoadFile(InputFileChangeEventArgs e)
     {
-        // Handle form submission logic here
+        var filename = await FileUploader.UploadFileAsync(e.File);
+        if (filename is null)
+        {
+            Model.ImageUrl = null;
+            return;
+        }
+
+
+        Model.ImageUrl = filename;
+    }
+
+    private async Task HandleSubmit()
+    {
+        var cheese = Cheese ?? new Cheese();
+
+        cheese.Description = Model.Description;
+        cheese.Name = Model.Name;
+        cheese.Price = Model.Price;
+        cheese.Strength = Model.Strength;
+        cheese.Type = Model.Type;
+        cheese.ImageUrl = Model.ImageUrl;
+
+        if (cheese.Id == 0)
+        {
+            await CheeseProvider.AddCheeseAsync(cheese);
+            Model = new CheeseModel();
+        }
+        else
+        {
+            await CheeseProvider.UpdateCheeseAsync(cheese);
+        }
+
+        NavigationManager.NavigateTo("/");
     }
 
     private sealed class CheeseModel
     {
-        [Required]
+        [Required(ErrorMessage = "Please enter the name of the cheese.")]
         public string Name { get; set; } = "";
-        [Required]
+
+        [Required(ErrorMessage = "Please enter the type of the cheese.")]
         public string Type { get; set; } = "";
-        [Required]
+
+        [Required(ErrorMessage = "Please enter the description of the cheese.")]
         public string Description { get; set; } = "";
-        [Required]
+
+        [Required(ErrorMessage = "Please enter the strength of the cheese.")]
         public string Strength { get; set; } = "";
-        [Required]
+
+        [Required(ErrorMessage = "Please enter the price of the cheese.")]
         public decimal Price { get; set; }
-        [Required]
+
+        [Required(ErrorMessage = "Images must be .jpg, .png or .gif and less than 5MB")]
         public string? ImageUrl { get; set; } = "";
 
         public CheeseModel()
