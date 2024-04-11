@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/MyCheeseShop/Database/cheese.db
+/MyCheeseShop/Database/cheese.db-shm
+/MyCheeseShop/Database/cheese.db-wal
