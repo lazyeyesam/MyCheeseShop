@@ -27,9 +27,9 @@
                     @if (IsEditable)
                     {
                         <td scope="col">
-                            <button class="btn btn-outline-success" @onclick="() => IncreaseQuantity(item)">➕</button>
-                            <button class="btn btn-outline-primary" @onclick="() => DecreaseQuantity(item)">➖</button>
-                            <button class="btn btn-outline-danger" @onclick="() => RemoveItem(item)">🗑</button>
+                            <button class="btn btn-outline-success mt-1 mt-md-0" @onclick="() => IncreaseQuantity(item)">➕</button>
+                            <button class="btn btn-outline-primary mt-1 mt-md-0" @onclick="() => DecreaseQuantity(item)">➖</button>
+                            <button class="btn btn-outline-danger mt-1 mt-md-0" @onclick="() => RemoveItem(item)">🗑</button>
                         </td>
                     }
                 </tr>
