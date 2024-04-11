@@ -6,14 +6,21 @@ namespace MyCheeseShop.Context
 {
     public class DatabaseContext : IdentityDbContext<User>
     {
+        private IWebHostEnvironment _environment;
+
         public DbSet<Cheese> Cheeses { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Order> Orders { get; set; }
 
+        public DatabaseContext(DbContextOptions<DatabaseContext> options, IWebHostEnvironment environment) : base(options)
+        {
+            _environment = environment;
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionbuilder)
         {
-            optionbuilder.UseSqlite($"Data Source=./Database/cheese.db");
+            var folder = Path.Combine(_environment.WebRootPath, "database");
+            optionbuilder.UseSqlite($"Data Source={folder}/cheese.db");
         }
     }
 }

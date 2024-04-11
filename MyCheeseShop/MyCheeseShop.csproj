@@ -17,8 +17,8 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
-    <Folder Include="Database\" />
     <Folder Include="wwwroot\favicon\" />
+    <Folder Include="wwwroot\database\" />
   </ItemGroup>
 
 </Project>
