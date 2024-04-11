@@ -16,7 +16,7 @@ else if (!cheeses.Any())
 }
 
 <div class="container mt-2">
-    <div class="d-flex justify-content-between mb-1">
+    <div class="d-flex justify-content-between flex-column flex-md-row mb-1">
         <div class="d-flex">
             <div class="dropdown me-1">
                 <a class="btn btn-outline-primary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -31,7 +31,7 @@ else if (!cheeses.Any())
             </div>
             <input type="text" class="form-control" placeholder="Search for cheese..." @bind="searchTerm" @bind:event="oninput">
         </div>
-        <div>
+        <div class="d-flex justify-content-end mt-2 mt-md-0">
             <a @onclick="GoToCart" class="btn btn-outline-primary">🛒 Cart (@ShoppingCart.Count())</a>
         </div>
     </div>
