@@ -364,3 +364,6 @@ FodyWeavers.xsd
 /MyCheeseShop/Database/cheese.db
 /MyCheeseShop/Database/cheese.db-shm
 /MyCheeseShop/Database/cheese.db-wal
+/MyCheeseShop/wwwroot/database/cheese.db
+/MyCheeseShop/wwwroot/database/cheese.db-shm
+/MyCheeseShop/wwwroot/database/cheese.db-wal
