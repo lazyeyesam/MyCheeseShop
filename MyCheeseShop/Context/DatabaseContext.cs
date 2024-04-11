@@ -13,10 +13,7 @@ namespace MyCheeseShop.Context
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionbuilder)
         {
-            var folder = Environment.SpecialFolder.MyDocuments;
-            var path = Environment.GetFolderPath(folder);
-            var dbPath = Path.Join(path, "cheese.db");
-            optionbuilder.UseSqlite($"Data Source={dbPath}");
+            optionbuilder.UseSqlite($"Data Source=./Database/cheese.db");
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using MyCheeseShop.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace MyCheeseShop.Context
 {
@@ -19,6 +20,8 @@ namespace MyCheeseShop.Context
 
         public async Task Seed()
         {
+            await _context.Database.MigrateAsync();
+
             if (!_context.Cheeses.Any())
             {
                 var cheeses = GetCheeses();
