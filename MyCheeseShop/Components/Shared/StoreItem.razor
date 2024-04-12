@@ -9,14 +9,14 @@
             <span class="badge bg-success">@Cheese.Strength</span>
         </h5>
         <div class="d-flex flex-column flex-sm-row justify-content-between">
-                <h5 class="card-title">@Cheese.Name</h5>
-                <h5><span class="badge bg-danger">@Cheese.Price.ToString("C")</span></h5>
+            <h5 class="card-title">@Cheese.Name</h5>
+            <h5><span class="badge bg-danger">@Cheese.Price.ToString("C")</span></h5>
         </div>
         <p class="card-text">@Cheese.Description</p>
         <div class="mt-auto">
             <EditForm Model="quantity" OnSubmit="AddToCart">
                 <div class="row">
-                    <div class="col">
+                    <div class="col-lg-6 col-12">
                         <InputSelect class="form-select w-100" @bind-Value="quantity" required>
                             @for (var i = 1; i <= 5; i++)
                             {
@@ -24,13 +24,13 @@
                             }
                         </InputSelect>
                     </div>
-                    <div class="col mt-0 mt-md-1">
+                    <div class="col-lg-6 col-12 mt-lg-0 mt-1">
                         <button class="btn btn-primary position-relative w-100">
                             Add to cart
                             @if (ShoppingCart.GetQuantity(Cheese) > 0)
                             {
                                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                    @(ShoppingCart.GetQuantity(Cheese)*100)g
+                                    @(ShoppingCart.GetQuantity(Cheese) * 100)g
                                     <span class="visually-hidden">@Cheese.Name in shopping cart</span>
                                 </span>
                             }
