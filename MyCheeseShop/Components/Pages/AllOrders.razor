@@ -20,7 +20,7 @@ else
         <div class="col-lg-6 col-12 mt-1">
             <div class="card h-100">
                 <div class="card-body bg-light">
-                    <div class="d-flex justify-content-center card-title">
+                    <div class="d-flex justify-content-center card-title flex-column">
                         <div class="btn-group" role="group" aria-label="Order status filters">
                             <input type="radio" class="btn-check" name="btnRadio" id="btnAll" autocomplete="off" checked @onclick="() => FilterOrders(OrderStatus.None)">
                             <label class="btn btn-outline-secondary order-filter btn-sm" for="btnAll">All</label>
@@ -41,7 +41,7 @@ else
                                 <th scope="col">Id</th>
                                 <th scope="col">Ordered</th>
                                 <th scope="col">Total</th>
-                                <th scope="col">User</th>
+                                <th scope="col" class="hide-on-small">User</th>
                                 <th scope="col"></th>
                             </tr>
                         </thead>
@@ -52,13 +52,13 @@ else
                                     <td scope="col" class="@GetCellColour(order.Status)">@order.Id</td>
                                     <td scope="col">@order.Created.ToString("dd MMMM yyyy")</td>
                                     <td scope="col">@order.Total.ToString("C")</td>
-                                    <td scope="col">@order.User.Email</td>
+                                    <td scope="col" class="hide-on-small">@order.User.Email</td>
                                     <td scope="col">
-                                        <button class="btn btn-outline-primary" @onclick="() => ShowDetails(order)">🔍</button>
+                                        <button class="btn btn-outline-primary mt-1 me-1 mt-md-0" @onclick="() => ShowDetails(order)">🔍</button>
                                         @if (order.Status == OrderStatus.Placed)
                                         {
-                                            <button class="btn btn-outline-success ms-1" @onclick="() => DispatchOrder(order)">📨</button>
-                                            <button class="btn btn-outline-danger ms-1" @onclick="() => CancelOrder(order)">❌</button>
+                                            <button class="btn btn-outline-success mt-1 mt-md-0" @onclick="() => DispatchOrder(order)">📨</button>
+                                            <button class="btn btn-outline-danger mt-1 mt-md-0" @onclick="() => CancelOrder(order)">❌</button>
                                         }
                                     </td>
                                 </tr>

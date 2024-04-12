@@ -38,7 +38,7 @@ h1:focus {
 }
 
 .card-img-left {
-    width: 10rem; /* Adjust as needed */
+    width: 10rem;
 }
 
 .card-body-flex {
@@ -49,4 +49,14 @@ h1:focus {
 .order-filter {
     width: 100px; 
     white-space: nowrap;
+}
+
+.thankyou-img {
+    width: 20rem;
+}
+
+@media (max-width: 576px) {
+    .hide-on-small {
+        display: none;
+    }
 }

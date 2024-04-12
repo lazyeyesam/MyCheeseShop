@@ -108,7 +108,7 @@
 
         await OrderProvider.CreateOrder(user, ShoppingCart.GetItems());
         ShoppingCart.Clear();
-        NavigationManager.NavigateTo("/");
+        NavigationManager.NavigateTo("/thank-you");
     }
 
     private async Task SimulatePayment()

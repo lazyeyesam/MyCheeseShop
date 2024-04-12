@@ -36,8 +36,8 @@ else
                             @foreach (var order in orders)
                             {
                                 <tr>
-                                    <td scope="col">@order.Id</td>
-                                    <td scope="col">@order.Created.ToString("U")</td>
+                                    <td scope="col" class="@GetCellColour(order.Status)">@order.Id</td>
+                                    <td scope="col">@order.Created.ToString("dd MMMM yyyy")</td>
                                     <td scope="col">@order.Total.ToString("C")</td>
                                     <td scope="col">@order.Status.ToString()</td>
                                     <td scope="col">
@@ -78,5 +78,16 @@ else
     private void ShowDetails(Order order)
     {
         selectedOrder = order;
+    }
+
+    private string GetCellColour(OrderStatus status)
+    {
+        return status switch
+        {
+            OrderStatus.Placed => "table-primary",
+            OrderStatus.Dispatched => "table-success",
+            OrderStatus.Cancelled => "table-danger",
+            _ => ""
+        };
     }
 }

@@ -1,0 +1,32 @@
+﻿@page "/Account/Logout"
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Authentication
+@inject SignInManager<User> SignInManager
+@inject IdentityRedirectManager RedirectManager
+
+<h3>Logout</h3>
+<p>You have been successfully logged out</p>
+<div>
+    <a href="/" class="btn btn-outline-primary">🧀 Back to cheeses</a>
+</div>
+
+<script>
+    window.onload = function () {
+        sessionStorage.clear();
+        window.location.href = "/";
+    };
+</script>
+
+@code {
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (HttpMethods.IsGet(HttpContext.Request.Method))
+        {
+            // Clear the existing external cookie to ensure a clean login process
+            await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
+        }
+    }
+}
