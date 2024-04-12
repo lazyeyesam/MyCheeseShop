@@ -36,7 +36,11 @@ builder.Services.AddIdentityCore<User>()
     .AddEntityFrameworkStores<DatabaseContext>()
     .AddSignInManager();
 
+builder.Services.AddLocalization();
+
 var app = builder.Build();
+
+app.UseRequestLocalization("en-GB");
 
 using var scope = app.Services.CreateScope();
 var seeder = scope.ServiceProvider.GetService<DatabaseSeeder>();
