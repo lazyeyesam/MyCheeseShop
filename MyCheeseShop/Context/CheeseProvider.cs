@@ -17,11 +17,6 @@ namespace MyCheeseShop.Context
             return await _context.Cheeses.OrderBy(cheese => cheese.Name).ToListAsync();
         }
 
-        public Cheese? GetCheese(int id)
-        {
-            return _context.Cheeses.Find(id);
-        }
-
         public async Task AddCheeseAsync(Cheese cheese)
         {
             _context.Cheeses.Add(cheese);
