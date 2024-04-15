@@ -20,6 +20,10 @@ namespace MyCheeseShop.Context
         protected override void OnConfiguring(DbContextOptionsBuilder optionbuilder)
         {
             var folder = Path.Combine(_environment.WebRootPath, "database");
+            if (!Directory.Exists(folder))
+            {
+                Directory.CreateDirectory(folder);
+            }
             optionbuilder.UseSqlite($"Data Source={folder}/cheese.db");
         }
     }
