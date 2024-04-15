@@ -52,7 +52,7 @@ else
                                     <td scope="col" class="@GetCellColour(order.Status)">@order.Id</td>
                                     <td scope="col">@order.Created.ToString("dd MMMM yyyy")</td>
                                     <td scope="col">@order.Total.ToString("C")</td>
-                                    <td scope="col" class="hide-on-small">@order.User.Email</td>
+                                    <td scope="col" class="hide-on-small" data-bs-toggle="tooltip" data-bs-placement="bottom" title="@order.User.Email">@($"{order.User.FirstName} {order.User.LastName}")</td>
                                     <td scope="col">
                                         <button class="btn btn-outline-primary mt-1 me-1 mt-md-0" @onclick="() => ShowDetails(order)">🔍</button>
                                         @if (order.Status == OrderStatus.Placed)
