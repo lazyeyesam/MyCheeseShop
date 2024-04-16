@@ -367,3 +367,4 @@ FodyWeavers.xsd
 /MyCheeseShop/wwwroot/database/cheese.db
 /MyCheeseShop/wwwroot/database/cheese.db-shm
 /MyCheeseShop/wwwroot/database/cheese.db-wal
+/MyCheeseShop/Properties/ServiceDependencies/SamsCheeseShop - Zip Deploy/profile.arm.json
