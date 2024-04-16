@@ -6,25 +6,25 @@ else
 {
     <div class="card">
         <div class="card-header">
-            <div class="d-flex justify-content-between flex-wrap">
-                <div class="col text-start">
+            <div class="d-flex justify-content-evenly flex-wrap">
+                <div>
                     <h5><span class="badge text-bg-success">Order: @Order.Id</span></h5>
                 </div>
-                <div class="col text-start">
-                    <h5><span class="badge @GetStatusColour(Order.Status)">@Order.Status.ToString()</span></h5>
-                </div>
-                <div class="col text-start">
+                <div>
                     <h5><span class="badge text-bg-dark">@Order.Created.ToString("U")</span></h5>
                 </div>
+                <div>
+                    <h5><span class="badge @GetStatusColour(Order.Status)">@Order.Status.ToString()</span></h5>
+                </div>
             </div>
-            <div class="d-flex justify-content-between flex-wrap">
-                <div class="col text-start">
+            <div class="d-flex justify-content-evenly flex-wrap">
+                <div>
                     <h5><span class="badge text-bg-danger">Total: @Order.Total.ToString("C")</span></h5>
                 </div>
-                <div class="col text-start">
+                <div>
                     <h5><span class="badge text-bg-info">@($"{Order.User.FirstName} {Order.User.LastName}")</span></h5>
                 </div>
-                <div class="col text-start">
+                <div>
                     <h5><span class="badge text-bg-warning">@($"{Order.User.Address}, {Order.User.City}")</span></h5>
                 </div>
             </div>
