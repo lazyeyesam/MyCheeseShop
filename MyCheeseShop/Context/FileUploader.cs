@@ -16,17 +16,20 @@ namespace MyCheeseShop.Context
 
         public async Task<string?> UploadFileAsync(IBrowserFile file)
         {
+            // Ensure the images folder exists
             var imagesFolder = Path.Combine(_environment.WebRootPath, "img", "cheeses");
             if (!Directory.Exists(imagesFolder)) Directory.CreateDirectory(imagesFolder);
 
-            //var fileName = Path.GetRandomFileName();
+            // Generate a unique file name
             var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.Name);
             var filePath = Path.Combine(imagesFolder, fileName);
             var fileExtension = Path.GetExtension(file.Name);
 
+            // Validate the file
             if (file.Size > MAX_FILE_SIZE) return null;
             if (!_allowedExtensions.Contains(fileExtension)) return null;
 
+            // Save the file
             using var stream = new FileStream(filePath, FileMode.Create);
             await file.OpenReadStream(MAX_FILE_SIZE).CopyToAsync(stream);
 
