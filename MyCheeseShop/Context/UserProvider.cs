@@ -48,7 +48,8 @@ namespace MyCheeseShop.Context
         public async Task<IEnumerable<User>> GetAllUsersAsync()
         {
             // Return all users
-            return await _context.Users.Include(user => user.Orders).ToListAsync();
+            return await _context.Users.Include(user => user.Orders)
+                         .OrderBy(user => user.LastName).ToListAsync();
         }
     }
 }

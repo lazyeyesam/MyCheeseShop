@@ -23,6 +23,12 @@ else
 {
     <div class="card">
         <div class="card-body bg-light">
+            <div class="col-3 mb-3">
+                <div class="input-group">
+                    <span class="input-group-text" id="search">🔍</span>
+                    <input type="text" class="form-control" placeholder="Search for customer..." aria-label="Search" aria-describedby="search" @bind="searchTerm" @bind:event="oninput" />
+                </div>
+            </div>
             <table class="table" style="background-color: white; vertical-align:middle;">
                 <thead>
                     <tr>
@@ -35,7 +41,7 @@ else
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var user in users)
+                    @foreach (var user in FilteredUsers)
                     {
                         <tr>
                             <td scope="col">@(UserProvider.IsAdmin(user).Result ? "🛡️" : "")</td>
@@ -61,6 +67,10 @@ else
                     }
                 </tbody>
             </table>
+            @if (!FilteredUsers.Any())
+            {
+                <p>🙁 No customers found</p>
+            }
         </div>
     </div>
 }
@@ -69,15 +79,42 @@ else
     private IEnumerable<User> users;
     private User loggedInUser;
 
+    private string searchTerm = "";
+    private IEnumerable<User> filteredUsers;
+    private IEnumerable<User> FilteredUsers
+    {
+        get
+        {
+            return filteredUsers.Where(GetSearchCriteria);
+        }
+        set
+        {
+            filteredUsers = value;
+        }
+    }
+
     protected override async Task OnInitializedAsync()
     {
         users = await UserProvider.GetAllUsersAsync();
+        filteredUsers = users;
+
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var username = authState?.User?.Identity?.Name;
         if (username != null)
         {
             loggedInUser = UserProvider.GetUserByUsername(username)!;
         }
+    }
+
+    private bool GetSearchCriteria(User user)
+    {
+        if (string.IsNullOrWhiteSpace(searchTerm)) return true;
+
+        return user.FirstName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)
+            || user.LastName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)
+            || user.Address.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)
+            || user.City.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)
+            || user.PostCode.Contains(searchTerm, StringComparison.OrdinalIgnoreCase);
     }
 
     private void ShowOrders(User user)
