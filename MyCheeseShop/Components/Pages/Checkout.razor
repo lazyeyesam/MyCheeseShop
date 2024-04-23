@@ -99,7 +99,7 @@
 
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var username = authState!.User!.Identity!.Name!;
-        user = UserProvider.GetUser(username)!;
+        user = UserProvider.GetUserByUsername(username)!;
     }
 
     private async Task MakePayment()

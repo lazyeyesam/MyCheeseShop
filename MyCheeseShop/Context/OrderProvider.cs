@@ -12,8 +12,10 @@ namespace MyCheeseShop.Context
             _context = context;
         }
 
-        public async Task<List<Order>> GetOrdersAsync(User user)
+        public async Task<List<Order>?> GetOrdersAsync(User? user)
         {
+            if (user == null) return null;
+
             // Return all orders for the specified user
             return await _context.Orders
                 .Where(order => order.User.UserName == user.UserName)
@@ -23,7 +25,7 @@ namespace MyCheeseShop.Context
                 .ToListAsync();
         }
 
-        public async Task<List<Order>> GetAllOrdersAsync()
+        public async Task<List<Order>?> GetAllOrdersAsync()
         {
             // Return all orders
             return await _context.Orders

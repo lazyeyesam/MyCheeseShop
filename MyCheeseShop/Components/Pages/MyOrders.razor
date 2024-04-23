@@ -69,7 +69,7 @@ else
     {
         var authstate = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var username = authstate.User!.Identity!.Name!;
-        var user = UserProvider.GetUser(username);
+        var user = UserProvider.GetUserByUsername(username);
 
         orders = await OrderProvider.GetOrdersAsync(user!);
         selectedOrder = orders?.FirstOrDefault();

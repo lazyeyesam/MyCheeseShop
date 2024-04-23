@@ -1,0 +1,104 @@
+﻿@page "/customers"
+@using Microsoft.AspNetCore.Identity
+@attribute [Authorize(Roles = "Admin")]
+@inject UserProvider UserProvider
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IJSRuntime Js
+
+
+<PageTitle>EasyBriezy - Customers</PageTitle>
+
+<h3>Customers</h3>
+
+@if (users is null)
+{
+    <p>Loading...</p>
+}
+else if (!users.Any())
+{
+    <p>🙁 No customers found</p>
+}
+else
+{
+    <div class="card">
+        <div class="card-body bg-light">
+            <table class="table" style="background-color: white; vertical-align:middle;">
+                <thead>
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col">Name</th>
+                        <th scope="col" class="hide-on-small">Email</th>
+                        <th scope="col">Address</th>
+                        <th scope="col">Orders</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in users)
+                    {
+                        <tr>
+                            <td scope="col">@(UserProvider.IsAdmin(user).Result ? "🛡️" : "")</td>
+                            <td scope="col">@($"{user.FirstName} {user.LastName}")</td>
+                            <td scope="col" class="hide-on-small">@user.Email</td>
+                            <td scope="col">@($"{user.Address}, {user.City}, {user.PostCode}")</td>
+                            <td scope="col">@user.Orders.Count()</td>
+                            <td scope="col">
+                                <button class="btn btn-outline-primary mt-1 me-1 mt-md-0" @onclick="() => ShowOrders(user)">📦</button>
+                                @if (loggedInUser.Id != user.Id)
+                                {
+                                    @if (!UserProvider.IsAdmin(user).Result)
+                                    {
+                                        <button class="btn btn-outline-danger mt-1 mt-md-0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Make Admin" @onclick="() => MakeAdmin(user)">🛡️</button>
+                                    }
+                                    else
+                                    {
+                                        <button class="btn btn-outline-success mt-1 mt-md-0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Remove Admin" @onclick="() => RemoveAdmin(user)">👤</button>
+                                    }
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+
+@code {
+    private IEnumerable<User> users;
+    private User loggedInUser;
+
+    protected override async Task OnInitializedAsync()
+    {
+        users = await UserProvider.GetAllUsersAsync();
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var username = authState?.User?.Identity?.Name;
+        if (username != null)
+        {
+            loggedInUser = UserProvider.GetUserByUsername(username)!;
+        }
+    }
+
+    private void ShowOrders(User user)
+    {
+        NavigationManager.NavigateTo($"/all-orders/{user.Id}");
+    }
+
+    private async Task MakeAdmin(User user)
+    {
+        await Js.InvokeVoidAsync("removeTooltips");
+        await UserProvider.MakeAdmin(user);
+    }
+
+    private async Task RemoveAdmin(User user)
+    {
+        await Js.InvokeVoidAsync("removeTooltips");
+        await UserProvider.RemoveAdmin(user);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await Js.InvokeVoidAsync("addTooltips");
+    }
+}

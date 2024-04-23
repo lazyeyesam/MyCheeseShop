@@ -1,11 +1,26 @@
-﻿@page "/all-orders"
+﻿@page "/all-orders/{UserId?}"
 @attribute [Authorize(Roles = "Admin")]
 @inject OrderProvider OrderProvider
-@inject IJSRuntime Js
+@inject UserProvider UserProvider
+@inject NavigationManager NavigationManager
 
 <PageTitle>EasyBriezy - Orders</PageTitle>
 
-<h3>Orders</h3>
+@if (user is not null)
+{
+    <div class="d-flex justify-content-between">
+        <div>
+            <h3>Orders for @user.FirstName @user.LastName</h3>
+        </div>
+        <div>
+            <a @onclick="GoToCustomers" class="btn btn-outline-primary">🧑🏼‍🤝‍🧑🏻 Back to Customers</a>
+        </div>
+    </div>
+}
+else
+{
+    <h3>Orders</h3>
+}
 
 @if (orders is null)
 {
@@ -100,9 +115,24 @@ else
 
     private Order? selectedOrder;
 
+    [Parameter]
+    public string UserId { get; set; }
+
+    private User? user;
+
     protected async override Task OnInitializedAsync()
     {
-        orders = await OrderProvider.GetAllOrdersAsync();
+        // Get the user and their orders if a UserId is provided
+        if (!string.IsNullOrWhiteSpace(UserId))
+        {
+            user = await UserProvider.GetUserByIdAsync(UserId);
+            orders = await OrderProvider.GetOrdersAsync(user);
+        }
+        else
+        {
+            orders = await OrderProvider.GetAllOrdersAsync();
+        }
+
         selectedOrder = FilteredOrders?.FirstOrDefault();
     }
 
@@ -138,8 +168,8 @@ else
         };
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    private void GoToCustomers()
     {
-        await Js.InvokeVoidAsync("addTooltips");
+        NavigationManager.NavigateTo("/customers");
     }
 }

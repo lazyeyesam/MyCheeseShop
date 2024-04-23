@@ -60,3 +60,7 @@ h1:focus {
         display: none;
     }
 }
+
+.no-line{
+    text-decoration: none;
+}
