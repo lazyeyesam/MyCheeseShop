@@ -50,6 +50,17 @@ namespace MyCheeseShop.Context
                 await _userManager.CreateAsync(admin, adminPassword);
                 await _userManager.AddToRoleAsync(admin, "Admin");
             }
+
+            await ResetAdminUser();
+        }
+
+        private async Task ResetAdminUser()
+        {
+            var admin = _context.Users.FirstOrDefault(user => user.UserName == "admin@cheese.com");
+            if (admin is not null && !await _userManager.IsInRoleAsync(admin, "Admin"))
+            {
+                await _userManager.AddToRoleAsync(admin, "Admin");
+            }
         }
 
         private List<Cheese> GetCheeses()
