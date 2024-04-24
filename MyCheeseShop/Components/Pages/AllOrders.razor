@@ -4,7 +4,7 @@
 @inject UserProvider UserProvider
 @inject NavigationManager NavigationManager
 
-<PageTitle>EasyBriezy - Orders</PageTitle>
+<PageTitle>Orders - EasyBriezy</PageTitle>
 
 @if (user is not null)
 {
@@ -13,7 +13,7 @@
             <h3>Orders for @user.FirstName @user.LastName</h3>
         </div>
         <div>
-            <a @onclick="GoToCustomers" class="btn btn-outline-primary">🧑🏼‍🤝‍🧑🏻 Back to Customers</a>
+            <a @onclick="GoToCustomers" class="btn btn-outline-primary">🧑🏼‍🤝‍🧑🏻 Customers</a>
         </div>
     </div>
 }
@@ -82,7 +82,7 @@ else
                             @if (!FilteredOrders.Any())
                             {
                                 <tr>
-                                    <td colspan="5">No orders found</td>
+                                    <td colspan="5">🙁 No orders found</td>
                                 </tr>
                             }
                         </tbody>
