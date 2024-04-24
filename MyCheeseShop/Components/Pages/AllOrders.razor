@@ -3,6 +3,7 @@
 @inject OrderProvider OrderProvider
 @inject UserProvider UserProvider
 @inject NavigationManager NavigationManager
+@inject IJSRuntime Js
 
 <PageTitle>Orders - EasyBriezy</PageTitle>
 
@@ -171,5 +172,11 @@ else
     private void GoToCustomers()
     {
         NavigationManager.NavigateTo("/customers");
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+            await Js.InvokeVoidAsync("addTooltips");
     }
 }
