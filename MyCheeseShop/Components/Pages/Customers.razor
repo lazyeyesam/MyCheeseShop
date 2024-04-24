@@ -65,12 +65,14 @@ else
                             </td>
                         </tr>
                     }
+                    @if (!FilteredUsers.Any())
+                    {
+                        <tr>
+                            <td colspan="5">🙁 No customers found</td>
+                        </tr>
+                    }
                 </tbody>
             </table>
-            @if (!FilteredUsers.Any())
-            {
-                <p>🙁 No customers found</p>
-            }
         </div>
     </div>
 }
