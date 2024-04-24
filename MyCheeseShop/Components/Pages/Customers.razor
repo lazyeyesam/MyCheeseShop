@@ -36,7 +36,7 @@ else
                         <th scope="col">Name</th>
                         <th scope="col" class="hide-on-small">Email</th>
                         <th scope="col">Address</th>
-                        <th scope="col">Orders</th>
+                        <th scope="col" class="hide-on-small">Orders</th>
                         <th scope="col">Actions</th>
                     </tr>
                 </thead>
@@ -48,7 +48,7 @@ else
                             <td scope="col">@($"{user.FirstName} {user.LastName}")</td>
                             <td scope="col" class="hide-on-small">@user.Email</td>
                             <td scope="col">@($"{user.Address}, {user.City}, {user.PostCode}")</td>
-                            <td scope="col">@user.Orders.Count()</td>
+                            <td scope="col" class="hide-on-small">@user.Orders.Count()</td>
                             <td scope="col">
                                 <button class="btn btn-outline-primary mt-1 me-1 mt-md-0" @onclick="() => ShowOrders(user)">📦</button>
                                 @if (loggedInUser.Id != user.Id)
