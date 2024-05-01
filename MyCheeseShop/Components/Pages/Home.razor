@@ -34,7 +34,7 @@ else if (!cheeses.Any())
             <a @onclick="GoToCart" class="btn btn-outline-primary">🛒 Cart (@ShoppingCart.Count())</a>
         </div>
     </div>
-    <div class="row row-cols-1 row-cols-md-4 g-4">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-4">
 
         @foreach (var cheese in FilteredCheeses)
         {
