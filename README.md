@@ -6,6 +6,8 @@ Welcome to the GitHub repository for Sam's Cheese Shop, a .NET Blazor Server app
 
 Sam's Cheese Shop is an interactive web application that simulates a cheese store management system. It is built using .NET Blazor Server technology, which allows for dynamic web page rendering and interactive user interfaces. It uses an SQLite database to manage users, cheese and orders.
 
+See the demo [here](https://samscheeseshop.azurewebsites.net/)
+
 ### Features
 
 - **Product Catalog**: Browse through a variety of cheeses with detailed descriptions.
