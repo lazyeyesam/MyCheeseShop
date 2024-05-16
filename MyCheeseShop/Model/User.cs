@@ -10,6 +10,7 @@ namespace MyCheeseShop.Model
         public string City { get; set; }
         public string PostCode { get; set; }
         public List<Order> Orders { get; set; } = [];
+        public List<Rating> Ratings { get; set; } = [];
 
     }
 }
