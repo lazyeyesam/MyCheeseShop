@@ -12,8 +12,11 @@
             <h5 class="card-title">@Cheese.Name</h5>
             <h5><span class="badge bg-danger">@Cheese.Price.ToString("C")</span></h5>
         </div>
-        <p class="card-text">@Cheese.Description</p>
+        <div class="card-text">@Cheese.Description</div>      
         <div class="mt-auto">
+            <div class="d-flex justify-content-end mb-1">
+                <StarRating Cheese="Cheese" />
+            </div>
             <EditForm Model="quantity" OnSubmit="AddToCart">
                 <div class="row">
                     <div class="col-lg-6 col-12">

@@ -1,0 +1,64 @@
+﻿@inject RatingsProvider RatingsProvider
+@inject UserProvider UserProvider
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<div class="ratings">
+    @for (var i = 0; i < AverageRating; i++)
+    {
+        <i @onclick="() => AddRating(1)" class="fa fa-star rating-color"></i>
+    }
+    @if (AverageRating % 0.5 > 0)
+    {
+        <i @onclick="() => AddRating(1)" class="fa-duotone fa-star-half rating-color"></i>
+    }
+    @for (var i = 0; i < 5 - AverageRating; i++)
+    {
+        <i @onclick="() => AddRating(1)" class="fa fa-star"></i>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public Cheese Cheese { get; set; }
+
+    private List<Rating> ratings = [];
+    private Rating? userRating;
+
+    private double AverageRating
+    {
+        get
+        {
+            if (userRating is null && !ratings.Any()) return 0;
+            var stars = userRating is not null ? userRating.Stars : ratings.Average(r => r.Stars);
+            return Math.Round(ratings.Average(r => r.Stars) * 2, MidpointRounding.AwayFromZero) / 2;
+        }
+    }
+
+    protected async override Task OnInitializedAsync()
+    {
+        // get the rating for the current user if it exists or get all the ratings for the cheese
+        var authstate = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var username = authstate.User?.Identity?.Name;
+        if (username is not null)
+        {
+            var user = UserProvider.GetUserByUsername(username)!;
+            userRating = RatingsProvider.GetUserRating(Cheese, user);
+        }
+        else
+        {
+            ratings = await RatingsProvider.GetRatingsAsync(Cheese);
+        }
+    }
+
+    private async Task AddRating(int stars)
+    {
+        var authstate = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var username = authstate.User?.Identity?.Name;
+        if (username is not null)
+        {
+            var user = UserProvider.GetUserByUsername(username)!;
+            await RatingsProvider.AddRatingAsync(Cheese, user, stars);
+            userRating = RatingsProvider.GetUserRating(Cheese, user);
+        }
+    }
+}

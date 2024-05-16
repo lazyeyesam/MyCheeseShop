@@ -11,6 +11,7 @@ namespace MyCheeseShop.Context
         public DbSet<Cheese> Cheeses { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<Rating> Ratings { get; set; }
 
         public DatabaseContext(DbContextOptions<DatabaseContext> options, IWebHostEnvironment environment) : base(options)
         {
