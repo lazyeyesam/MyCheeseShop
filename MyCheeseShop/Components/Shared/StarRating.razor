@@ -3,17 +3,22 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
 <div class="ratings">
+    @{stars = 0;}
+
     @for (var i = 0; i < AverageRating; i++)
     {
-        <i @onclick="() => AddRating(1)" class="fa fa-star rating-color"></i>
+        var rating = ++stars;
+        <i @onclick="() => AddRating(rating)" class="fa fa-star rating-color"></i>
     }
     @if (AverageRating % 0.5 > 0)
     {
-        <i @onclick="() => AddRating(1)" class="fa-duotone fa-star-half rating-color"></i>
+        var rating = ++stars;
+        <i @onclick="() => AddRating(rating)" class="fa-duotone fa-star-half rating-color"></i>
     }
     @for (var i = 0; i < 5 - AverageRating; i++)
     {
-        <i @onclick="() => AddRating(1)" class="fa fa-star"></i>
+        var rating = ++stars;
+        <i @onclick="() => AddRating(rating)" class="fa fa-star"></i>
     }
 </div>
 
@@ -23,14 +28,15 @@
 
     private List<Rating> ratings = [];
     private Rating? userRating;
+    private int stars;
 
     private double AverageRating
     {
         get
         {
-            if (userRating is null && !ratings.Any()) return 0;
-            var stars = userRating is not null ? userRating.Stars : ratings.Average(r => r.Stars);
-            return Math.Round(ratings.Average(r => r.Stars) * 2, MidpointRounding.AwayFromZero) / 2;
+            if (userRating is null && !ratings.Any()) return 5;
+            var stars = userRating is not null ? userRating.Stars : Math.Round(ratings.Average(r => r.Stars) * 2, MidpointRounding.AwayFromZero) / 2;
+            return stars;
         }
     }
 
