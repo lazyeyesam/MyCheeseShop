@@ -21,6 +21,11 @@ namespace MyCheeseShop.Components
                 context.Orders.RemoveRange(orders);
                 await context.SaveChangesAsync();
 
+                // Remove all ratings
+                var ratings = context.Ratings.ToList();
+                context.Ratings.RemoveRange(ratings);
+                await context.SaveChangesAsync();
+
                 // Remove all cheeses
                 var cheeses = context.Cheeses.ToList();
                 context.Cheeses.RemoveRange(cheeses);
