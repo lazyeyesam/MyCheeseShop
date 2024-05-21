@@ -2,18 +2,15 @@
 @inject UserProvider UserProvider
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
-<div class="ratings">
-    @{stars = 0;}
+<div class="ratings mt-1">
+    @{
+        stars = 0;
+    }
 
-    @for (var i = 0; i < AverageRating; i++)
+    @for (var i = 0; i < Math.Floor(AverageRating); i++)
     {
         var rating = ++stars;
         <i @onclick="() => AddRating(rating)" class="fa fa-star rating-color"></i>
-    }
-    @if (AverageRating % 0.5 > 0)
-    {
-        var rating = ++stars;
-        <i @onclick="() => AddRating(rating)" class="fa-duotone fa-star-half rating-color"></i>
     }
     @for (var i = 0; i < 5 - AverageRating; i++)
     {
@@ -50,10 +47,7 @@
             var user = UserProvider.GetUserByUsername(username)!;
             userRating = RatingsProvider.GetUserRating(Cheese, user);
         }
-        else
-        {
-            ratings = await RatingsProvider.GetRatingsAsync(Cheese);
-        }
+        ratings = await RatingsProvider.GetRatingsAsync(Cheese);
     }
 
     private async Task AddRating(int stars)
