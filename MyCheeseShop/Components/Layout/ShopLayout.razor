@@ -19,11 +19,7 @@
             {
                 items.ForEach(async item =>
                 {
-                    var existing = DatabaseContext.Cheeses.Local.FirstOrDefault(cheese => cheese.Id == item.Cheese.Id);
-                    if (existing == null)
-                    {
-                        item.Cheese = await DatabaseContext.Cheeses.FindAsync(item.Cheese.Id);
-                    }
+                    item.Cheese = await DatabaseContext.Cheeses.FindAsync(item.Cheese.Id);
                 });
                 ShoppingCart.SetItems(items);
             }
