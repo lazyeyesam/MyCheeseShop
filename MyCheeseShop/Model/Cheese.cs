@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Runtime.ConstrainedExecution;
+using System.Text.Json.Serialization;
 
 namespace MyCheeseShop.Model
 {
@@ -12,6 +13,7 @@ namespace MyCheeseShop.Model
         public string Strength { get; set; }
         public decimal Price { get; set; }
         public string? ImageUrl { get; set; }
+        [JsonIgnore]
         public List<Rating> Ratings { get; set; } = [];
     }
 }
