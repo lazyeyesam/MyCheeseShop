@@ -7,12 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\database\cheese.db" />
-    <Content Remove="wwwroot\database\cheese.db-shm" />
-    <Content Remove="wwwroot\database\cheese.db-wal" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.3">
@@ -23,13 +17,8 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
+    <Folder Include="wwwroot\database\" />
     <Folder Include="wwwroot\favicon\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="wwwroot\database\cheese.db" />
-    <None Include="wwwroot\database\cheese.db-shm" />
-    <None Include="wwwroot\database\cheese.db-wal" />
   </ItemGroup>
 
 </Project>

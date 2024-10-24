@@ -34,7 +34,7 @@ namespace MyCheeseShop.Context
                 await _roleManager.CreateAsync(new IdentityRole("Customer"));
 
                 var adminEmail = "admin@cheese.com";
-                var adminPassword = "Cheese123!";
+                var adminPassword = "Cheese123!";   // make sure password is complex enough
 
                 var admin = new User
                 {
