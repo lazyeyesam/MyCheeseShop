@@ -20,6 +20,7 @@ namespace MyCheeseShop.Context
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionbuilder)
         {
+            // store database in the folder structure for deployment
             var folder = Path.Combine(_environment.WebRootPath, "database");
             if (!Directory.Exists(folder))
             {
